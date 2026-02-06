@@ -1,0 +1,13 @@
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# PHP/Composer
+vendor/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# WordPress temporários
+*.log

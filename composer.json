@@ -1,0 +1,13 @@
+{
+    "name": "artigo/sults",
+    "description": "Sistema Editorial",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "Artigo\\Sults\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {}
+}
