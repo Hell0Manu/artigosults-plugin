@@ -15,8 +15,7 @@ interface PostModalBreafingProps {
 
 export function PostModalBreafing({ title, status, authors }: PostModalBreafingProps) {
     return (
-    <DialogContent className="rounded-[24px] sm:rounded-[24px] bg-white border-none shadow-lg">
-      <DialogHeader className="gap-2">
+<DialogContent className="rounded-[24px] bg-white border-none shadow-lg max-h-[90dvh] overflow-y-auto custom-scrollbar">      <DialogHeader className="gap-2">
         <Badge className={`w-fit rounded-full border-none ${status.color}`}>
           {status.label}
         </Badge>

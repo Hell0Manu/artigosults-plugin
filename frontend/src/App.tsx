@@ -1,54 +1,102 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PostGrid } from "@/features/dashboard";
-import { Input } from "./components/ui/input";
 import { Search } from "lucide-react";
-
-const MOCK_DATA = [
-  { id: "1", title: "Como criar um plugin WP com React", status: "publish", date: "12/10", authorName: "Emanuelle" },
-  { id: "2", title: "Dicas de Performance no LocalWP", status: "draft", date: "13/10", authorName: "Emanuelle" },
-  { id: "3", title: "Configurando o Vite 7", status: "publish", date: "14/10", authorName: "Emanuelle" },
-  { id: "4", title: "O guia do Shadcn UI", status: "draft", date: "15/10", authorName: "Emanuelle" },
-  { id: "5", title: "Dicas de Performance no LocalWP", status: "draft", date: "13/10", authorName: "Emanuelle" },
-  { id: "6", title: "Dicas de Performance no LocalWP", status: "draft", date: "13/10", authorName: "Emanuelle" },
-];
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { PostGrid, PostCard } from "@/features/dashboard";
+import { useDashboardData } from "@/features/dashboard/hooks/useDashboardData";
 
 export default function App() {
+  // Chamamos o nosso Hook para obter os dados e a lógica de pesquisa
+  const { 
+    posts, 
+    allCount, 
+    publishedCount, 
+    searchTerm, 
+    setSearchTerm 
+  } = useDashboardData();
+
   return (
-   <div className="p-10 max-w-[1600px] mx-auto space-y-10">
-      {/* Header: Título e Pesquisa */}
-      <div className="flex justify-between items-center gap-4 w-full">
-        <h1 className="text-[30px] font-[800] text-white leading-[38px]">Dashboard</h1>
-        
-        <div className="flex gap-2">
-          <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full overflow-hidden">
-            <input className="text-[#4E595F] text-sm font-bold"Pesquisar />
-            <Search className="w-5 h-5 text-slate-600" />
+    <div className=" w-full flex flex-col overflow-hidden font-jakarta">
+      
+      {/* header */}
+      <header className="p-4 md:p-10 pb-4 flex-shrink-0 w-full">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
+          
+          {/* titulo */}
+          <h1 className="text-2xl md:text-[30px] font-[800] text-white leading-tight">
+            Dashboard
+          </h1>
+          
+          {/* barra de pesquisa */}
+          <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-[#00ACAC] w-full sm:w-auto">
+            <input 
+              type="text"
+              placeholder="Pesquisar posts..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="text-[#4E595F] text-sm font-bold bg-transparent outline-none flex-1 sm:w-64"
+            />
+            <Search className="w-5 h-5 text-slate-400" />
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Navegação por Tabs */}
-        <Tabs defaultValue="status" className="w-full">
-          {/* Estilo das Tabs */}
-          <TabsList className="bg-transparent border-b border-slate-700 w-full justify-start h-12 p-0 gap-4 rounded-none">
+      {/* Area de conteudo*/}
+      <Tabs defaultValue="status" className="flex flex-col h-full w-full p-6 space-y-6 overflow-hidden ">
+        
+        {/* Lista de Abas */}
+        <div className=" w-full flex-shrink-0 border-b border-slate-700 m-0">
+          <TabsList className="bg-transparent justify-start h-12 p-0 gap-8 rounded-none">
             <TabsTrigger 
               value="status" 
-              className="h-12 px-4 bg-transparent data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-[#00ACAC] data-[state=active]:text-[#00ACAC] text-slate-400 font-bold rounded-none"
+              className="justify-start cursor-pointer px-0 bg-transparent data-[state=active]:bg-transparent data-[state=active]:border-b-[#00ACAC] data-[state=active]:text-[#00ACAC] text-slate-400 font-bold rounded-none"
             >
-              Por status <span className="ml-2 bg-[#EEF2FF] text-[#00ACAC] px-2 py-0.5 rounded-full text-xs">10</span>
+              Por status 
+              <span className="ml-2 bg-[#EEF2FF] text-[#00ACAC] px-2 py-0.5 rounded-full text-[10px]">
+                {allCount}
+              </span>
             </TabsTrigger>
+            
             <TabsTrigger 
               value="publicados" 
-              className="h-12 px-4 bg-transparent data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-[#00ACAC] data-[state=active]:text-[#00ACAC] text-white font-bold rounded-none"
+              className="justify-start cursor-pointer px-0 bg-transparent data-[state=active]:bg-transparent data-[state=active]:border-b-[#00ACAC] data-[state=active]:text-[#00ACAC] text-slate-400 font-bold rounded-none"
             >
-              Artigos publicados <span className="ml-2 bg-[#EEF2FF] text-[#4F46E5] px-2 py-0.5 rounded-full text-xs">12</span>
+              Artigos publicados 
+              <span className="ml-2 bg-[#EEF2FF] text-[#00ACAC] px-2 py-0.5 rounded-full text-[10px]">
+                {publishedCount}
+              </span>
             </TabsTrigger>
           </TabsList>
+        </div>
 
-          <TabsContent value="status" className="pt-6">
-            <PostGrid posts={MOCK_DATA} />
+        {/* Conteudo das abas */}
+        <div className="flex-1 overflow-hidden pt-8">
+
+          <TabsContent value="status" className="h-full m-0 outline-none">
+            <PostGrid posts={posts} />
           </TabsContent>
-        </Tabs>
+
+          <TabsContent value="publicados" className="h-full m-0 outline-none overflow-y-auto custom-scrollbar">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20 mx-auto">
+              {posts
+                .filter(p => p.status === 'publish')
+                .map(post => (
+                  <PostCard 
+                    key={post.id} 
+                    {...post} 
+                    status={{ label: 'Publicado', color: 'bg-green-500 text-white' }} 
+                    authors={["https://placehold.co/32x32"]} 
+                    commentsCount={0} 
+                  />
+                ))
+              }
+              {publishedCount === 0 && (
+                <div className="col-span-full text-center py-20 text-slate-500 font-bold">
+                  Nenhum artigo publicado encontrado.
+                </div>
+              )}
+            </div>
+          </TabsContent>
+        </div>
+      </Tabs>
     </div>
   );
 }
