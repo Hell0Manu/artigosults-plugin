@@ -7,6 +7,32 @@
 @tailwind components;
 @tailwind utilities; */
 
+@theme {
+  --color-accent-gray: #7E8D95;
+  --color-alert-information: #00ACAC;
+  --color-alert-warning: #F59E0B;
+  --color-alert-error: #EF4444;
+  --color-content-secondary: #4E595F;
+  --font-jakarta: "Plus Jakarta Sans", sans-serif;
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+  }
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -189,5 +215,6 @@ button:focus-visible {
   }
   body {
     @apply bg-background text-foreground;
+    @apply bg-[#333] font-jakarta;
   }
 }
