@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { WPPost } from "@/types";
+import type { WPPost, WPPostStatus } from "@/types";
 
 export function useDashboardData() {
   const [posts] = useState<WPPost[]>([
@@ -9,25 +9,33 @@ export function useDashboardData() {
     { id: "4", title: "O guia do Shadcn UI", status: "draft", date: "15/10", authorName: "Emanuelle" },
     { id: "5", title: "Segurança em APIs WordPress", status: "pending", date: "16/10", authorName: "Emanuelle" },
     { id: "6", title: "Otimização de Imagens", status: "draft", date: "17/10", authorName: "Emanuelle" },
+    { id: "7", title: "Refatoração de Componentes", status: "draft", date: "18/10", authorName: "Emanuelle" },
+    { id: "8", title: "Testes Unitários com Vitest", status: "draft", date: "19/10", authorName: "Emanuelle" },
+    { id: "9", title: "Ajuste de Responsividade Mobile", status: "draft", date: "20/10", authorName: "Emanuelle" },
+    { id: "10", title: "Correção de Bugs no Modal", status: "adjustment", date: "21/10", authorName: "Emanuelle" },
+    { id: "11", title: "Documentação da API", status: "pending", date: "22/10", authorName: "Emanuelle" },
   ]);
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  // 1. Lógica de Pesquisa
+  // Controla página unica
+  const [selectedStatus, setSelectedStatus] = useState<WPPostStatus | null>(null);
+
+  // Lógica de Pesquisa
   const filteredPosts = posts.filter(post => 
     post.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // 2. Contadores para as abas
+  // Contadores para as abas
   const publishedPosts = filteredPosts.filter(p => p.status === 'publish');
 
   return {
-    posts: filteredPosts, 
-    publishedCount: publishedPosts.length,
-    allCount: filteredPosts.length,
+    posts: filteredPosts,
     searchTerm,
     setSearchTerm,
-    loading: false, 
-    error: null
+    selectedStatus,
+    setSelectedStatus, 
+    publishedCount: filteredPosts.filter(p => p.status === 'publish').length,
+    allCount: filteredPosts.length,
   };
 }

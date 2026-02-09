@@ -5,8 +5,7 @@ interface PostGridProps {
   posts: WPPost[];
 }
 
-export function PostGrid({ posts }: PostGridProps) {
-  const columns = [
+export function PostGrid({ posts, onHeaderClick }: { posts: WPPost[], onHeaderClick: (status: any) => void }) {  const columns = [
     { title: "Rascunhos", slug: "draft", color: "bg-accent-gray" },
     { title: "Pendentes", slug: "pending", color: "bg-alert-warning" },
     { title: "Em andamento", slug: "in_progress", color: "bg-alert-information" },
@@ -24,14 +23,15 @@ export function PostGrid({ posts }: PostGridProps) {
            className="w-[75vw] md:w-80 flex-shrink-0 flex flex-col max-h-full"
           >
             {/* Cabeçalho da Coluna */}
-            <div className={`flex items-center gap-3 p-2 rounded-full mb-4 flex-shrink-0 ${col.color}`}>
-              <div className="flex items-center justify-center bg-white text-slate-900 text-sm font-bold px-3 py-1.5 rounded-full min-w-[36px]">
+            <button 
+              onClick={() => onHeaderClick(col.slug)}
+              className={`flex cursor-pointer items-center gap-3 p-2 rounded-full mb-4 flex-shrink-0 transition-transform active:scale-95 hover:brightness-110 ${col.color}`}
+            >
+              <div className="flex items-center justify-center bg-white text-slate-900 text-sm font-bold px-3 py-1.5 rounded-full">
                 {columnPosts.length}
               </div>
-              <span className="text-white text-base font-bold truncate">
-                {col.title}
-              </span>
-            </div>
+              <span className="text-white text-base font-bold">{col.title}</span>
+            </button>
 
             {/* Lista de Cards da Coluna */}
             <div className="flex flex-col gap-3 overflow-y-auto custom-scrollbar">
