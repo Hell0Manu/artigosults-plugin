@@ -1,50 +1,54 @@
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from "@/components/ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { MultiSelect } from "./MultiSelect";
+import type { WPAuthor } from "@/types";
 
 interface FilterBarProps {
-  authors: string[];
-  categories: string[];
-  onAuthorChange: (val: string) => void;
-  onCategoryChange: (val: string) => void;
+  authors: WPAuthor[]; 
+  categories: string[]; 
+  selectedAuthors: string[];
+  selectedCategories: string[];
+  onAuthorChange: (val: string[]) => void;
+  onCategoryChange: (val: string[]) => void;
 }
 
-export function FilterBar({ authors, categories, onAuthorChange, onCategoryChange }: FilterBarProps) {
+export function FilterBar({ 
+  authors, categories, 
+  selectedAuthors, selectedCategories, 
+  onAuthorChange, onCategoryChange 
+}: FilterBarProps) {
   return (
-    <div className="flex flex-wrap items-center gap-4 bg-transparent">
-      <span className="text-slate-400 text-xs font-bold  tracking-widest">Filtrar por:</span>
-      
-      {/* Filtro de Autor */}
-      <Select onValueChange={onAuthorChange} defaultValue="all">
-        <SelectTrigger className="w-[160px] bg-white rounded-full border-none font-bold text-slate-600 shadow-sm focus:ring-[#00ACAC]">
-          <SelectValue placeholder="Autor" />
-        </SelectTrigger>
-        <SelectContent className="rounded-2xl border-none shadow-xl">
-          {authors.map(author => (
-            <SelectItem key={author} value={author} className="font-medium">
-              {author === "all" ? "Todos os Autores" : author}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <div className="flex flex-wrap items-center gap-2 bg-transparent">      
+      {/* MultiSelect autores) */}
+      <MultiSelect<WPAuthor>
+        title="Autores"
+        options={authors}
+        selectedValues={selectedAuthors}
+        onSelectionChange={onAuthorChange}
+        getValue={(author) => author.name} 
+        getLabel={(author) => author.name} 
+        renderOption={(author) => (
+          <div className="flex items-center gap-2 w-full">
+            <Avatar className="h-7 w-7 border border-slate-100">
+              <AvatarImage src={author.avatarUrl} alt={author.name} />
+              <AvatarFallback className="text-xs bg-slate-100 text-slate-500">{author.name.substring(0,2).toUpperCase()}</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col items-start overflow-hidden">
+              <span className="font-bold text-sm text-slate-800 leading-none truncate">{author.name}</span>
+              <span className="text-[11px] text-slate-400 font-medium truncate">{author.role}</span>
+            </div>
+          </div>
+        )}
+      />
 
-      {/* Filtro de Categoria */}
-      <Select onValueChange={onCategoryChange} defaultValue="all">
-        <SelectTrigger className="w-[160px] bg-white rounded-full border-none font-bold text-slate-600 shadow-sm focus:ring-[#00ACAC]">
-          <SelectValue placeholder="Categoria" />
-        </SelectTrigger>
-        <SelectContent className="rounded-2xl border-none shadow-xl">
-          {categories.map(cat => (
-            <SelectItem key={cat} value={cat} className="font-medium">
-              {cat === "all" ? "Todas as Categorias" : cat}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      {/* MultiSelect categoria) */}
+      <MultiSelect<string>
+        title="Categorias"
+        options={categories}
+        selectedValues={selectedCategories}
+        onSelectionChange={onCategoryChange}
+        getValue={(cat) => cat} 
+        getLabel={(cat) => cat} 
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
-// src/features/dashboard/components/CategoryView.tsx
 import { Search, ChevronLeft } from "lucide-react";
-import type { WPPost, WPPostStatus } from "@/types";
+import type { WPPost, WPPostStatus, WPAuthor } from "@/types";
 import { PostCard } from "./PostCard";
+import { FilterBar } from "./FilterBar";
 
 interface CategoryViewProps {
     status: WPPostStatus;
@@ -9,9 +9,20 @@ interface CategoryViewProps {
     onBack: () => void;
     searchTerm: string;           
     setSearchTerm: (t: string) => void; 
+
+    authors: WPAuthor[];
+    categories: string[];
+    filterAuthors: string[];
+    setFilterAuthors: (vals: string[]) => void;
+    filterCategories: string[];
+    setFilterCategories: (vals: string[]) => void;
 }
 
-export function CategoryView({ status, posts, onBack, searchTerm, setSearchTerm }: CategoryViewProps) {
+export function CategoryView({ 
+    status, posts, onBack, searchTerm, setSearchTerm,
+    authors, categories, filterAuthors, setFilterAuthors, filterCategories, setFilterCategories
+}: CategoryViewProps) {
+
     const statusLabels: Record<string, string> = {
         draft: "Rascunho",
         pending: "Pendente",
@@ -47,7 +58,7 @@ export function CategoryView({ status, posts, onBack, searchTerm, setSearchTerm 
                     <div className={`justify-between w-full pl-2 pr-6 py-2 rounded-full flex items-center gap-3 ${statusColors[status] || "bg-slate-500"}`}>
 
                         {/* Contador, Título e Botão Voltar */}
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                             <button
                                 onClick={onBack}
                                 className="bg-white hover:bg-slate-100 text-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm active:scale-95"
@@ -63,20 +74,32 @@ export function CategoryView({ status, posts, onBack, searchTerm, setSearchTerm 
                             </h2>
                         </div>
 
-                        {/* Barra de Pesquisa */}
-                        <div className="flex items-center gap-2 px-4 py-2.5 bg-white rounded-full border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-[#00ACAC] w-64 transition-all">
-                            <input
-                                type="text"
-                                placeholder={`Pesquisar em ${statusLabels[status]}...`}
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="text-[#4E595F] text-sm font-bold bg-transparent outline-none flex-1 sm:w-64"
-                            />
-                            <Search className="w-5 h-5 text-slate-400" />
+                        <div className="flex items-center gap-2">
+                            <div className="flex-shrink-0">
+                                <FilterBar 
+                                    authors={authors} 
+                                    categories={categories}
+                                    selectedAuthors={filterAuthors}      
+                                    selectedCategories={filterCategories} 
+                                    onAuthorChange={setFilterAuthors}     
+                                    onCategoryChange={setFilterCategories}  
+                                />
+                            </div>
+
+                            {/* Barra de Pesquisa */}
+                            <div className="flex items-center gap-2 px-4 py-2.5 bg-white rounded-full border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-[#00ACAC] w-64 transition-all">
+                                <input
+                                    type="text"
+                                    placeholder={`Pesquisar em ${statusLabels[status]}...`}
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="text-[#4E595F] text-sm font-bold bg-transparent outline-none flex-1 sm:w-64"
+                                />
+                                
+                                <Search className="w-5 h-5 text-slate-400" />
+                            </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
 

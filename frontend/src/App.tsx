@@ -6,7 +6,7 @@ import { CategoryView } from "./features/dashboard/components/CategoryView";
 import { FilterBar } from "@/features/dashboard/components/FilterBar";
 
 export default function App() {
-    const { 
+  const { 
     posts, 
     allCount, 
     publishedCount, 
@@ -16,24 +16,29 @@ export default function App() {
     setSelectedStatus,
     authors,
     categories,
-    setFilterAuthor,
-    setFilterCategory
+    filterAuthors, 
+    setFilterAuthors,
+    filterCategories,
+    setFilterCategories
   } = useDashboardData();
 
   // Modo foco: se um status estiver selecionado, ocutamos header e as tabs globais
   if (selectedStatus) {
-    return (
-      <CategoryView 
-        status={selectedStatus}
-        posts={posts.filter(p => p.status === selectedStatus)}
-        onBack={() => {
-           setSelectedStatus(null);
-           setSearchTerm(""); 
-        }}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
-    );
+      return (
+        <CategoryView 
+          status={selectedStatus}
+          posts={posts.filter(p => p.status === selectedStatus)} 
+          onBack={() => { setSelectedStatus(null); setSearchTerm(""); }}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          authors={authors}
+          categories={categories}
+          filterAuthors={filterAuthors}
+          setFilterAuthors={setFilterAuthors}
+          filterCategories={filterCategories}
+          setFilterCategories={setFilterCategories}
+        />
+      );
   }
 
   return (
@@ -44,19 +49,21 @@ export default function App() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
           
           {/* titulo */}
-          <h1 className="text-2xl md:text-[30px] font-[800] text-white leading-tight">
-            Dashboard
-          </h1>
-          <div className="flex">
-            <div className="px-6 md:px-10 flex-shrink-0">
+          <h1 className="text-2xl md:text-[30px] font-[800] text-white leading-tight"> Dashboard </h1>
+
+          <div className="flex gap-2">
+            {/* Barra de Filtros (Multi-seleção) */}
+            <div className="mx-auto flex-shrink-0">
               <FilterBar 
                 authors={authors} 
-                categories={categories} 
-                onAuthorChange={setFilterAuthor}
-                onCategoryChange={setFilterCategory}
+                categories={categories}
+                selectedAuthors={filterAuthors}      
+                selectedCategories={filterCategories} 
+                onAuthorChange={setFilterAuthors}     
+                onCategoryChange={setFilterCategories}  
               />
             </div>
-            
+              
             {/* barra de pesquisa */}
             <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-[#00ACAC] w-full sm:w-auto">
               <input 
@@ -72,10 +79,8 @@ export default function App() {
         </div>
       </header>
 
-
       {/* Area de conteudo*/}
       <Tabs  defaultValue="status" className="flex flex-col h-full w-full px-6 space-y-6 overflow-hidden ">
-        
         {/* Lista de Abas */}
         {!selectedStatus && (
           <div className=" w-full flex-shrink-0 border-b border-slate-700 m-0 mb-4">
@@ -114,6 +119,12 @@ export default function App() {
                 onBack={() => setSelectedStatus(null)}
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
+                authors={authors}
+                categories={categories}
+                filterAuthors={filterAuthors}
+                setFilterAuthors={setFilterAuthors}
+                filterCategories={filterCategories}
+                setFilterCategories={setFilterCategories}
               />
             ) : (
               // Visualização no modo kanban

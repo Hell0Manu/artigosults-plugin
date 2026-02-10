@@ -12,6 +12,7 @@ export interface WPAuthor {
   id: string;
   name: string;
   avatarUrl?: string;
+  role: string;
 }
 
 //Interface Principal do Post
