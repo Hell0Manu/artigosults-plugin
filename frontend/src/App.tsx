@@ -4,10 +4,12 @@ import { PostGrid, PostCard } from "@/features/dashboard";
 import { useDashboardData } from "@/features/dashboard/hooks/useDashboardData";
 import { CategoryView } from "./features/dashboard/components/CategoryView";
 import { FilterBar } from "@/features/dashboard/components/FilterBar";
+import { MainLayout } from "./components/layout/MainLayout";
 
 export default function App() {
   const { 
     posts, 
+    isLoading,
     allCount, 
     publishedCount, 
     searchTerm, 
@@ -41,19 +43,19 @@ export default function App() {
       );
   }
 
-  return (
+  const dashboardContent = (
     <div className=" w-full flex flex-col overflow-hidden font-jakarta">
       
       {/* header */}
-      <header className="p-4 md:p-10 pb-4 flex-shrink-0 w-full">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
+      <header className="flex-shrink-0 w-full">
+        <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4  w-full">
           
           {/* titulo */}
           <h1 className="text-2xl md:text-[30px] font-[800] text-white leading-tight"> Dashboard </h1>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full justify-end">            
             {/* Barra de Filtros (Multi-seleção) */}
-            <div className="mx-auto flex-shrink-0">
+            <div className="flex-shrink-0">
               <FilterBar 
                 authors={authors} 
                 categories={categories}
@@ -80,7 +82,7 @@ export default function App() {
       </header>
 
       {/* Area de conteudo*/}
-      <Tabs  defaultValue="status" className="flex flex-col h-full w-full px-6 space-y-6 overflow-hidden ">
+      <Tabs  defaultValue="status" className="flex flex-col h-full w-full space-y-6 overflow-hidden ">
         {/* Lista de Abas */}
         {!selectedStatus && (
           <div className=" w-full flex-shrink-0 border-b border-slate-700 m-0 mb-4">
@@ -128,7 +130,7 @@ export default function App() {
               />
             ) : (
               // Visualização no modo kanban
-              <PostGrid posts={posts} onHeaderClick={(status) => setSelectedStatus(status)} />
+              <PostGrid posts={posts} isLoading={isLoading} onHeaderClick={(status) => setSelectedStatus(status)} />
             )}        
           </TabsContent>
 
@@ -157,5 +159,27 @@ export default function App() {
         </div>
       </Tabs>
     </div>
+  );
+
+return (
+    <MainLayout>
+      {selectedStatus ? (
+       <CategoryView 
+                status={selectedStatus} 
+                posts={posts.filter(p => p.status === selectedStatus)}
+                onBack={() => setSelectedStatus(null)}
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                authors={authors}
+                categories={categories}
+                filterAuthors={filterAuthors}
+                setFilterAuthors={setFilterAuthors}
+                filterCategories={filterCategories}
+                setFilterCategories={setFilterCategories}
+              />
+      ) : (
+        dashboardContent
+      )}
+    </MainLayout>
   );
 }

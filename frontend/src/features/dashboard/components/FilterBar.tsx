@@ -17,7 +17,7 @@ export function FilterBar({
   onAuthorChange, onCategoryChange 
 }: FilterBarProps) {
   return (
-    <div className="flex flex-wrap items-center gap-2 bg-transparent">      
+    <div className="flex flex-wrap items-center gap-2 bg-transparent/">      
       {/* MultiSelect autores) */}
       <MultiSelect<WPAuthor>
         title="Autores"

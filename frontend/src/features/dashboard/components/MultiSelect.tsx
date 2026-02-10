@@ -62,7 +62,7 @@ export function MultiSelect<T>({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between rounded-full border-slate-200 hover:border-indigo-300 bg-white px-3 h-10"
+          className="w-full sm:w-[200px] justify-between rounded-full border-slate-200 hover:border-indigo-300 bg-white px-3 h-10"
         >
           <div className="flex gap-1 overflow-hidden items-center">
             {selectedValues.length === 0 ? (
@@ -85,7 +85,7 @@ export function MultiSelect<T>({
       </PopoverTrigger>
       <PopoverContent className="w-[240px] p-0 rounded-xl shadow-xl overflow-hidden" align="start">
         <Command className="border-none">
-          {/* Input de Busca Integrado */}
+          {/* Input de Busca */}
           <CommandInput placeholder={`Pesquisar ${title.toLowerCase()}...`} className="h-11 font-medium" />
           <CommandList>
             <CommandEmpty className="py-3 text-center text-sm text-slate-500">Nenhum resultado.</CommandEmpty>

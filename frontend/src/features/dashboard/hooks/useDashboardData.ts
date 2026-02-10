@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { WPPost, WPPostStatus, WPAuthor } from "@/types";
 
 const MOCK_AUTHORS: Record<string, WPAuthor> = {
@@ -50,8 +50,16 @@ export function useDashboardData() {
     });
   }, [posts, searchTerm, filterAuthors, filterCategories]);
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 3000);
+    return () => clearTimeout(timer);
+  }, [])
+  
   return {
     posts: filteredPosts,
+    isLoading,
     searchTerm,
     setSearchTerm,
     selectedStatus,

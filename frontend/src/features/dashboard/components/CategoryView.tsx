@@ -51,53 +51,60 @@ export function CategoryView({
         <div className="p-4 md:p-10 pb-4 flex-1 flex flex-col h-full font-jakarta">
 
             {/* Cabeçalho da Categoria */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 flex-shrink-0">
+            <div className="flex flex-col gap-4 mb-8 flex-shrink-0">
+            
+                <div className={`
+                    w-full p-2 lg:pr-6 lg:pl-2 
+                    rounded-[2rem]
+                    flex flex-col xl:flex-row items-center justify-between 
+                    gap-4 transition-all
+                    ${statusColors[status] || "bg-slate-500"}
+                `}>
 
-                <div className="flex items-center gap-4 w-full">
-                    {/* Badge*/}
-                    <div className={`justify-between w-full pl-2 pr-6 py-2 rounded-full flex items-center gap-3 ${statusColors[status] || "bg-slate-500"}`}>
+                    {/* Navegação, Contador e Título */}
+                    <div className="flex items-center gap-3 w-full xl:w-auto justify-start pl-2 md:pl-0">
+                        <button
+                            onClick={onBack}
+                            className="bg-white hover:bg-slate-100 text-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm active:scale-95 shrink-0"
+                        >
+                            <ChevronLeft className="w-5 h-5" />
+                        </button>
 
-                        {/* Contador, Título e Botão Voltar */}
                         <div className="flex items-center gap-2">
-                            <button
-                                onClick={onBack}
-                                className="bg-white hover:bg-slate-100 text-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-sm active:scale-95"
-                            >
-                                <ChevronLeft className="w-5 h-5" />
-                            </button>
-
-                            <span className="bg-white/20 text-white px-2 py-0.5 rounded text-sm font-bold">
+                            <span className="bg-white/20 text-white px-2 py-0.5 rounded-lg text-sm font-bold">
                                 {posts.length}
                             </span>
-                            <h2 className="text-white text-xl font-bold capitalize">
+                            <h2 className="text-white text-lg md:text-xl font-bold capitalize truncate">
                                 {statusLabels[status] || status}
                             </h2>
                         </div>
+                    </div>
 
-                        <div className="flex items-center gap-2">
-                            <div className="flex-shrink-0">
-                                <FilterBar 
-                                    authors={authors} 
-                                    categories={categories}
-                                    selectedAuthors={filterAuthors}      
-                                    selectedCategories={filterCategories} 
-                                    onAuthorChange={setFilterAuthors}     
-                                    onCategoryChange={setFilterCategories}  
-                                />
-                            </div>
+                    {/* Filtros e Pesquisa */}
+                    <div className="flex flex-col md:flex-row items-center gap-3 w-full xl:w-auto px-2 md:px-0 pb-2 xl:pb-0">
+                        
+                        {/* FilterBar adaptável */}
+                        <div className="w-full md:w-auto overflow-hidden">
+                            <FilterBar 
+                                authors={authors} 
+                                categories={categories}
+                                selectedAuthors={filterAuthors}      
+                                selectedCategories={filterCategories} 
+                                onAuthorChange={setFilterAuthors}     
+                                onCategoryChange={setFilterCategories}  
+                            />
+                        </div>
 
-                            {/* Barra de Pesquisa */}
-                            <div className="flex items-center gap-2 px-4 py-2.5 bg-white rounded-full border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-[#00ACAC] w-64 transition-all">
-                                <input
-                                    type="text"
-                                    placeholder={`Pesquisar em ${statusLabels[status]}...`}
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="text-[#4E595F] text-sm font-bold bg-transparent outline-none flex-1 sm:w-64"
-                                />
-                                
-                                <Search className="w-5 h-5 text-slate-400" />
-                            </div>
+                        {/* Barra de Pesquisa Responsiva */}
+                        <div className="relative flex items-center group w-full md:w-64">
+                            <input
+                                type="text"
+                                placeholder={`Pesquisar...`}
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full pl-4 pr-10 py-2 bg-white rounded-full border-none shadow-sm outline-none focus:ring-2 focus:ring-white/50 text-[#4E595F] text-sm font-bold transition-all placeholder:text-slate-400"
+                            />
+                            <Search className="absolute right-3.5 w-4 h-4 text-slate-400 group-focus-within:text-[#00ACAC] transition-colors" />
                         </div>
                     </div>
                 </div>

@@ -1,11 +1,20 @@
 import { PostCard } from "./PostCard";
 import type { WPPost } from "@/types";
+import { DashboardSkeleton } from "./DashboardSkeleton"
 
 interface PostGridProps {
   posts: WPPost[];
+  isLoading: boolean;
+  onHeaderClick: (status: any) => void;
 }
 
-export function PostGrid({ posts, onHeaderClick }: { posts: WPPost[], onHeaderClick: (status: any) => void }) {  const columns = [
+export function PostGrid({ posts, isLoading, onHeaderClick }: PostGridProps) {
+  
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
+  const columns = [
     { title: "Rascunhos", slug: "draft", color: "bg-accent-gray" },
     { title: "Pendentes", slug: "pending", color: "bg-alert-warning" },
     { title: "Em andamento", slug: "in_progress", color: "bg-alert-information" },
@@ -20,7 +29,6 @@ export function PostGrid({ posts, onHeaderClick }: { posts: WPPost[], onHeaderCl
     "CMS": "bg-slate-100 text-slate-600",
     "Segurança": "bg-red-100 text-red-600"
   };
-
   return (
     <div className="flex gap-6 h-full overflow-x-auto items-start pb-10 custom-scrollbar">
       {columns.map((col) => {
