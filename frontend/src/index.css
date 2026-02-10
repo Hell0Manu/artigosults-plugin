@@ -17,8 +17,8 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;  /* Largura para scroll vertical */
-  height: 6px; /* ALTURA para scroll horizontal (OBRIGATÓRIO) */
+  width: 6px;  
+  height: 6px; 
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -26,12 +26,12 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #334155; /* Cor da barra (slate-700) */
+  background: #334155; 
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #475569; /* Cor ao passar o mouse */
+  background: #475569; 
 }
 
 :root {

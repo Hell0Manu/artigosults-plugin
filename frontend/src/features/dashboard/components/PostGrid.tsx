@@ -12,6 +12,15 @@ export function PostGrid({ posts, onHeaderClick }: { posts: WPPost[], onHeaderCl
     { title: "Precisa de ajuste", slug: "adjustment", color: "bg-alert-error" }
   ];
 
+  const categoryColors: Record<string, string> = {
+    "Desenvolvimento": "bg-indigo-100 text-indigo-600",
+    "Tecnologia": "bg-blue-100 text-blue-600",
+    "Design": "bg-purple-100 text-purple-600",
+    "Marketing": "bg-orange-100 text-orange-600",
+    "CMS": "bg-slate-100 text-slate-600",
+    "Segurança": "bg-red-100 text-red-600"
+  };
+
   return (
     <div className="flex gap-6 h-full overflow-x-auto items-start pb-10 custom-scrollbar">
       {columns.map((col) => {
@@ -45,6 +54,10 @@ export function PostGrid({ posts, onHeaderClick }: { posts: WPPost[], onHeaderCl
                   status={{ 
                     label: col.title, 
                     color: col.color 
+                  }}
+                  category={{
+                     label: post.category, 
+                    color: categoryColors[post.category]
                   }}
                 />
               ))}

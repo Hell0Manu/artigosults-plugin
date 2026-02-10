@@ -28,6 +28,14 @@ export function CategoryView({ status, posts, onBack, searchTerm, setSearchTerm 
         adjustment: "bg-[#EF4444]"
     };
 
+    const categoryColors: Record<string, string> = {
+        "Desenvolvimento": "bg-indigo-100 text-indigo-600",
+        "Tecnologia": "bg-blue-100 text-blue-600",
+        "Design": "bg-purple-100 text-purple-600",
+        "Marketing": "bg-orange-100 text-orange-600",
+        "CMS": "bg-slate-100 text-slate-600",
+    };
+
     return (
         <div className="p-4 md:p-10 pb-4 flex-1 flex flex-col h-full font-jakarta">
 
@@ -79,6 +87,10 @@ export function CategoryView({ status, posts, onBack, searchTerm, setSearchTerm 
                         <PostCard
                             key={post.id}
                             {...post}
+                            category={{
+                                label: post.category,
+                                color: categoryColors[post.category] || "bg-slate-100 text-slate-600" 
+                            }}
                             authors={["https://placehold.co/32x32"]}
                             commentsCount={11}
                             status={{

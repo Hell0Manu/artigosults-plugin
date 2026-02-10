@@ -6,6 +6,10 @@ import { PostModalBreafing } from "./PostModalBreafing";
 
 interface PostCardProps {
   title: string;
+  category: {
+    label: string;
+    color: string;
+  }
   status: {
     label: string;
     color: string;
@@ -15,14 +19,14 @@ interface PostCardProps {
   authors: string[];
 }
 
-export function PostCard({ title, status, commentsCount, date, authors }: PostCardProps) {
+export function PostCard({ title, category, status, commentsCount, date, authors }: PostCardProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <div className="p-3 bg-white border border-slate-200 rounded-[24px] shadow-sm flex flex-col gap-4 w-full cursor-pointer hover:border-indigo-300 transition-all active:scale-95 text-left">          {/* Badge */}
           <div className="flex gap-2">
-            <Badge className={`rounded-full border-none px-3 ${status.color}`}>
-              {status.label}
+            <Badge className={`rounded-full border-none px-3 ${category.color}`}>
+              {category.label}
             </Badge>
           </div>
 
@@ -63,6 +67,7 @@ export function PostCard({ title, status, commentsCount, date, authors }: PostCa
       <PostModalBreafing 
       title={title} 
       status={status} 
+      category={category}
       authors={authors}/>
     </Dialog>
   );

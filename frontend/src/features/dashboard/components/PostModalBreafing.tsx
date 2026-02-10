@@ -10,15 +10,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 interface PostModalBreafingProps {
   title: string;
   status: { label: string; color: string };
+  category: { label: string; color: string };
   authors: string[];
 }
 
-export function PostModalBreafing({ title, status, authors }: PostModalBreafingProps) {
+export function PostModalBreafing({ title, category, status, authors }: PostModalBreafingProps) {
     return (
-<DialogContent className="rounded-[24px] bg-white border-none shadow-lg max-h-[90dvh] overflow-y-auto custom-scrollbar">      <DialogHeader className="gap-2">
-        <Badge className={`w-fit rounded-full border-none ${status.color}`}>
-          {status.label}
-        </Badge>
+      <DialogContent className="rounded-[24px] bg-white border-none shadow-lg max-h-[90dvh] overflow-y-auto custom-scrollbar">      <DialogHeader className="gap-2">
+       <div className="flex gap-3">
+          <Badge className={`w-fit rounded-full border-none ${status.color}`}>
+            {status.label}
+          </Badge>
+          <Badge className={`rounded-full border-none px-3 ${category.color}`}>
+            {category.label}
+          </Badge>
+        </div>
         <DialogTitle className="text-2xl font-bold text-left leading-tight text-[#1E293B]">
           {title}
         </DialogTitle>

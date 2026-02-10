@@ -3,6 +3,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { PostGrid, PostCard } from "@/features/dashboard";
 import { useDashboardData } from "@/features/dashboard/hooks/useDashboardData";
 import { CategoryView } from "./features/dashboard/components/CategoryView";
+import { FilterBar } from "@/features/dashboard/components/FilterBar";
 
 export default function App() {
     const { 
@@ -12,9 +13,14 @@ export default function App() {
     searchTerm, 
     setSearchTerm,
     selectedStatus, 
-    setSelectedStatus 
+    setSelectedStatus,
+    authors,
+    categories,
+    setFilterAuthor,
+    setFilterCategory
   } = useDashboardData();
 
+  // Modo foco: se um status estiver selecionado, ocutamos header e as tabs globais
   if (selectedStatus) {
     return (
       <CategoryView 
@@ -22,7 +28,7 @@ export default function App() {
         posts={posts.filter(p => p.status === selectedStatus)}
         onBack={() => {
            setSelectedStatus(null);
-           setSearchTerm(""); // Opcional: Limpar busca ao voltar
+           setSearchTerm(""); 
         }}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -41,20 +47,31 @@ export default function App() {
           <h1 className="text-2xl md:text-[30px] font-[800] text-white leading-tight">
             Dashboard
           </h1>
-          
-          {/* barra de pesquisa */}
-          <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-[#00ACAC] w-full sm:w-auto">
-            <input 
-              type="text"
-              placeholder="Pesquisar"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="text-[#4E595F] text-sm font-bold bg-transparent outline-none flex-1 sm:w-64"
-            />
-            <Search className="w-5 h-5 text-slate-400" />
+          <div className="flex">
+            <div className="px-6 md:px-10 flex-shrink-0">
+              <FilterBar 
+                authors={authors} 
+                categories={categories} 
+                onAuthorChange={setFilterAuthor}
+                onCategoryChange={setFilterCategory}
+              />
+            </div>
+            
+            {/* barra de pesquisa */}
+            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-[#00ACAC] w-full sm:w-auto">
+              <input 
+                type="text"
+                placeholder="Pesquisar"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="text-[#4E595F] text-sm font-bold bg-transparent outline-none flex-1 sm:w-64"
+              />
+              <Search className="w-5 h-5 text-slate-400" />
+            </div>
           </div>
         </div>
       </header>
+
 
       {/* Area de conteudo*/}
       <Tabs  defaultValue="status" className="flex flex-col h-full w-full px-6 space-y-6 overflow-hidden ">
@@ -99,9 +116,10 @@ export default function App() {
                 setSearchTerm={setSearchTerm}
               />
             ) : (
-              // VISUALIZAÇÃO KANBAN
+              // Visualização no modo kanban
               <PostGrid posts={posts} onHeaderClick={(status) => setSelectedStatus(status)} />
-            )}          </TabsContent>
+            )}        
+          </TabsContent>
 
           <TabsContent value="publicados" className="h-full m-0 outline-none overflow-y-auto custom-scrollbar">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20 mx-auto">
@@ -111,6 +129,7 @@ export default function App() {
                   <PostCard 
                     key={post.id} 
                     {...post} 
+                    category={{ label: post.category, color: "bg-slate-100 text-slate-600" }}
                     status={{ label: 'Publicado', color: 'bg-green-500 text-white' }} 
                     authors={["https://placehold.co/32x32"]} 
                     commentsCount={0} 

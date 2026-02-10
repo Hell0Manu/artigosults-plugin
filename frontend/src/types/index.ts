@@ -18,10 +18,11 @@ export interface WPAuthor {
 export interface WPPost {
   id: string;
   title: string;
-  date: string;         // Data formatada (ex: "12/10")
+  date: string;         // Formato ISO: "2026-02-10"
   status: WPPostStatus; 
   authorName: string;   
   author?: WPAuthor;    
   excerpt?: string;     // Resumo do post
+  category: string;
   commentsCount?: number;
 }
