@@ -8,78 +8,95 @@
 @tailwind utilities; */
 
 @theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-jakarta: "Plus Jakarta Sans", sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-sidebar: var(--sidebar);
+  --color-brand: #00ACAC;
+
   --color-accent-gray: #7E8D95;
   --color-alert-information: #00ACAC;
   --color-alert-warning: #F59E0B;
   --color-alert-error: #EF4444;
   --color-content-secondary: #4E595F;
-  --font-jakarta: "Plus Jakarta Sans", sans-serif;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;  
-  height: 6px; 
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #334155; 
-  border-radius: 10px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #475569; 
 }
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+
+  /* =========================
+     BACKGROUND
+  ========================== */
+  --background: #FFFFFF; /* background-primary */
+  --background-secondary: #EEF0F1;
+  --background-tertiary: #D2D7DA;
+  --background-inverse: #202527;
+
+  /* =========================
+     CONTENT
+  ========================== */
+  --foreground: #202527; /* content-primary */
+  --content-secondary: #7E8D95;
+  --content-tertiary: #9AA6AC;
+  --content-inverse: #FFFFFF;
+  --content-brand: #00ACAC;
+
+  /* =========================
+     BORDER
+  ========================== */
+  --border: #D2D7DA; /* border-primary */
+  --border-secondary: #EEF0F1;
+  --border-strong: #373F43;
+  --border-focus: #7E8D95;
+
+  /* =========================
+     BRAND
+  ========================== */
+  --primary: #00ACAC;
+  --primary-hover: #167E7E;
+  --primary-active: #126868;
+  --primary-foreground: #FFFFFF;
+
+  /* =========================
+     ALERTS
+  ========================== */
+  --alert-information: #206DF3;
+  --alert-error: #DC3838;
+  --alert-warning: #F9C11A;
+  --alert-success: #32AE70;
+
+  --alert-information-light: #E0EDFF;
+  --alert-error-light: #FBE5E5;
+  --alert-warning-light: #FEF7E1;
+  --alert-success-light: #E7F8EF;
+
+  /* =========================
+     ACCENTS
+  ========================== */
+  --accent-blue: #206DF3;
+  --accent-purple: #6643D0;
+  --accent-pink: #FF148A;
+  --accent-green: #32AE70;
+  --accent-gray: #7E8D95;
+
+  /* =========================
+     INPUT STATES
+  ========================== */
+  --input-border-default: #D2D7DA;
+  --input-border-hover: #9AA6AC;
+  --input-border-focus: #7E8D95;
+  --input-border-disabled: #EEF0F1;
+
+  --content-disabled: #9AA6AC;
+
+  /* Sidebar */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #202527;
 }
+
 
 
 @media (prefers-color-scheme: light) {
@@ -137,48 +154,121 @@
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  /* =========================
+     BACKGROUND
+  ========================== */
+  --background: #202527; /* background-inverse */
+  --background-secondary: #373F43;
+  --background-tertiary: #4E595F;
+  --background-inverse: #FFFFFF;
+
+  /* =========================
+     CONTENT
+  ========================== */
+  --foreground: #FFFFFF;
+  --content-secondary: #D2D7DA;
+  --content-tertiary: #9AA6AC;
+  --content-inverse: #202527;
+  --content-brand: #00ACAC;
+
+  /* =========================
+     BORDER
+  ========================== */
+  --border: #373F43;
+  --border-secondary: #4E595F;
+  --border-strong: #EEF0F1;
+  --border-focus: #00ACAC;
+
+  /* =========================
+     BRAND
+  ========================== */
+  --primary: #00ACAC;
+  --primary-hover: #4FC4C4;
+  --primary-active: #9CDEDE;
+  --primary-foreground: #202527;
+
+  /* =========================
+     ALERTS
+  ========================== */
+  --alert-information: #206DF3;
+  --alert-error: #DC3838;
+  --alert-warning: #F9C11A;
+  --alert-success: #32AE70;
+
+  --alert-information-light: rgba(32,109,243,0.15);
+  --alert-error-light: rgba(220,56,56,0.15);
+  --alert-warning-light: rgba(249,193,26,0.15);
+  --alert-success-light: rgba(50,174,112,0.15);
+
+  /* =========================
+     ACCENTS
+  ========================== */
+  --accent-blue: #4794FF;
+  --accent-purple: #7F5AED;
+  --accent-pink: #FF47A3;
+  --accent-green: #49CA8A;
+  --accent-gray: #9AA6AC;
+
+  /* =========================
+     INPUT STATES
+  ========================== */
+  --input-border-default: #373F43;
+  --input-border-hover: #4E595F;
+  --input-border-focus: #00ACAC;
+  --input-border-disabled: #2C3236;
+
+  --content-disabled: #65737B;
+
+  /* Sidebar */
+  --sidebar: #0A171F;
+  --sidebar-foreground: #FFFFFF;
 }
+
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply font-jakarta;
+   @apply font-jakarta bg-background text-foreground transition-colors duration-300;
   }
 }
 
+/* ========================================
+   Custom Scrollbar
+======================================== */
+
+.custom-scrollbar {
+  scrollbar-width: thin; 
+  scrollbar-color: rgba(126, 141, 149, 0.4) transparent;
+}
+
+/* Webkit */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin-block: 8px; 
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(126, 141, 149, 0.35); 
+  border-radius: 999px;
+  border: 2px solid transparent; 
+  background-clip: content-box;
+  transition: background-color 0.2s ease;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(126, 141, 149, 0.6);
+}
+
+/* =====================================================
+   GLOBAL INTERACTION
+===================================================== */
 a, button {
   cursor: pointer;
 }

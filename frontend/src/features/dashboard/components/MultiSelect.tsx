@@ -62,11 +62,11 @@ export function MultiSelect<T>({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full sm:w-[200px] justify-between rounded-full border-slate-200 hover:border-indigo-300 bg-white px-3 h-10"
+          className="w-full sm:w-[200px] justify-between rounded-full border hover:border-indigo-300 bg-white px-3 h-10"
         >
           <div className="flex gap-1 overflow-hidden items-center">
             {selectedValues.length === 0 ? (
-              <span className="text-sm font-bold text-slate-600 truncate">Todos os {title}</span>
+              <span className="text-sm font-bold text-foreground truncate">Todos os {title}</span>
             ) : (
               <div className="flex gap-1 items-center">
                 {selectedValues.slice(0, 2).map((val) => (

@@ -1,15 +1,17 @@
 import { PostCard } from "./PostCard";
 import type { WPPost } from "@/types";
-import { DashboardSkeleton } from "./DashboardSkeleton"
+import { useDashboardStore } from "@/store/useDashboardStore";
+import { DashboardSkeleton } from "./Skeleton/DashboardSkeleton"
 
 interface PostGridProps {
   posts: WPPost[];
   isLoading: boolean;
-  onHeaderClick: (status: any) => void;
 }
 
-export function PostGrid({ posts, isLoading, onHeaderClick }: PostGridProps) {
-  
+export function PostGrid({ posts, isLoading }: PostGridProps) {
+
+  const { setSelectedStatus } = useDashboardStore();
+
   if (isLoading) {
     return <DashboardSkeleton />;
   }
@@ -26,7 +28,7 @@ export function PostGrid({ posts, isLoading, onHeaderClick }: PostGridProps) {
     "Tecnologia": "bg-blue-100 text-blue-600",
     "Design": "bg-purple-100 text-purple-600",
     "Marketing": "bg-orange-100 text-orange-600",
-    "CMS": "bg-slate-100 text-slate-600",
+    "CMS": "bg-slate-100 text-foreground",
     "Segurança": "bg-red-100 text-red-600"
   };
   return (
@@ -41,7 +43,7 @@ export function PostGrid({ posts, isLoading, onHeaderClick }: PostGridProps) {
           >
             {/* Cabeçalho da Coluna */}
             <button 
-              onClick={() => onHeaderClick(col.slug)}
+              onClick={() => setSelectedStatus(col.slug as any)}
               className={`flex cursor-pointer items-center gap-3 p-2 rounded-full mb-4 flex-shrink-0 transition-transform active:scale-95 hover:brightness-110 ${col.color}`}
             >
               <div className="flex items-center justify-center bg-white text-slate-900 text-sm font-bold px-3 py-1.5 rounded-full">
@@ -58,7 +60,7 @@ export function PostGrid({ posts, isLoading, onHeaderClick }: PostGridProps) {
                   title={post.title}
                   date={post.date}
                   commentsCount={11}
-                  authors={["https://placehold.co/32x32"]} 
+                  authors={post.author?.avatarUrl ? [post.author.avatarUrl] : ["https://placehold.co/32x32"]}
                   status={{ 
                     label: col.title, 
                     color: col.color 
