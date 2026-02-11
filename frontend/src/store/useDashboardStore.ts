@@ -1,10 +1,12 @@
+// src/store/useDashboardStore.ts
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { WPPost, WPPostStatus, WPUser } from "@/types";
 
 interface DashboardState {
   currentUser: WPUser | null;
-  allPosts: WPPost[]; 
-  posts: WPPost[];   
+  allPosts: WPPost[];
+  posts: WPPost[];
   authors: WPUser[];
   categories: string[];
   isLoading: boolean;
@@ -12,7 +14,7 @@ interface DashboardState {
   selectedStatus: WPPostStatus | null;
   filterAuthors: string[];
   filterCategories: string[];
-  
+
   setSearchTerm: (term: string) => void;
   setSelectedStatus: (status: WPPostStatus | null) => void;
   setFilterAuthors: (authors: string[]) => void;
@@ -26,9 +28,9 @@ interface DashboardState {
 }
 
 const MOCK_AUTHORS: Record<string, WPUser> = {
-  emanuelle: { id: "1", name: "Emanuelle", avatarUrl: "https://i.pravatar.cc/150?u=emanuelle", role: "Editora Chefe" },
-  marcos: { id: "2", name: "Marcos", avatarUrl: "https://i.pravatar.cc/150?u=marcos", role: "Redator Pleno" },
-  ricardo: { id: "3", name: "Ricardo", avatarUrl: "https://i.pravatar.cc/150?u=ricardo", role: "Revisor" },
+  emanuelle: { id: "1", name: "Emanuelle", email: "emanuelle@sults.com", avatarUrl: "https://i.pravatar.cc/150?u=emanuelle", role: "Editora Chefe" },
+  marcos: { id: "2", name: "Marcos", email: "marcos@sults.com", avatarUrl: "https://i.pravatar.cc/150?u=marcos", role: "Redator Pleno" },
+  ricardo: { id: "3", name: "Ricardo", email: "ricardo@sults.com", avatarUrl: "https://i.pravatar.cc/150?u=ricardo", role: "Revisor" },
 };
 
 const INITIAL_POSTS: WPPost[] = [
@@ -59,63 +61,76 @@ const INITIAL_POSTS: WPPost[] = [
   { id: "25", title: "Performance em aplicações SPA", status: "publish", date: "2026-01-17", author: MOCK_AUTHORS.emanuelle, category: "Desenvolvimento", commentsCount: 16 },
   { id: "26", title: "Automação de deploy com Docker", status: "adjustment", date: "2026-01-16", author: MOCK_AUTHORS.marcos, category: "DevOps", commentsCount: 5 },
 ];
-export const useDashboardStore = create<DashboardState>((set, get) => ({
-  allPosts: INITIAL_POSTS,
-  posts: INITIAL_POSTS,
-  authors: Array.from(new Map(INITIAL_POSTS.map(p => [p.author.name, p.author])).values()),
-  categories: Array.from(new Set(INITIAL_POSTS.map(p => p.category))),
-  isLoading: false,
-  searchTerm: "",
-  selectedStatus: null,
-  filterAuthors: [],
-  filterCategories: [],
-  isProfileOpen: false,
 
-  currentUser: {
-    id: "1",
-    name: "Emanuelle",
-    email: "emanuelle@sults.com",
-    avatarUrl: "https://i.pravatar.cc/150?u=emanuelle", 
-    role: "Editora Chefe",
-    coverUrl: "https://placehold.co/1200x400/00ACAC/white?text="
-  },
-  
-  applyFilters: () => {
-    const { allPosts, searchTerm, filterAuthors, filterCategories } = get();
-    
-    const filtered = allPosts.filter(post => {
-      const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesAuthor = filterAuthors.length === 0 || filterAuthors.includes(post.author.name);
-      const matchesCategory = filterCategories.length === 0 || filterCategories.includes(post.category);
-      return matchesSearch && matchesAuthor && matchesCategory;
-    });
+export const useDashboardStore = create<DashboardState>()(
+  persist(
+    (set, get) => ({
+      allPosts: INITIAL_POSTS,
+      posts: INITIAL_POSTS,
+      authors: Array.from(new Map(INITIAL_POSTS.map(p => [p.author.name, p.author])).values()),
+      categories: Array.from(new Set(INITIAL_POSTS.map(p => p.category))),
+      isLoading: false,
+      searchTerm: "",
+      selectedStatus: null,
+      filterAuthors: [],
+      filterCategories: [],
+      isProfileOpen: false,
 
-    set({ posts: filtered }); 
-  },
+      currentUser: {
+        id: "1",
+        name: "Emanuelle",
+        email: "emanuelle@sults.com",
+        avatarUrl: "https://i.pravatar.cc/150?u=emanuelle",
+        role: "Editora Chefe",
+        coverUrl: "https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1200&h=400&auto=format&fit=crop"
+      },
 
-  setSearchTerm: (term) => {
-    set({ searchTerm: term });
-    get().applyFilters();
-  },
+      applyFilters: () => {
+        const { allPosts, searchTerm, filterAuthors, filterCategories } = get();
 
-  setSelectedStatus: (status) => set({ selectedStatus: status }),
+        const filtered = allPosts.filter(post => {
+          const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchesAuthor = filterAuthors.length === 0 || filterAuthors.includes(post.author.name);
+          const matchesCategory = filterCategories.length === 0 || filterCategories.includes(post.category);
+          return matchesSearch && matchesAuthor && matchesCategory;
+        });
 
-  setFilterAuthors: (authors) => {
-    set({ filterAuthors: authors });
-    get().applyFilters();
-  },
+        set({ posts: filtered });
+      },
 
-  setFilterCategories: (categories) => {
-    set({ filterCategories: categories });
-    get().applyFilters();
-  },
+      setSearchTerm: (term) => {
+        set({ searchTerm: term });
+        get().applyFilters();
+      },
 
-  setLoading: (loading) => set({ isLoading: loading }),
+      setSelectedStatus: (status) => set({ selectedStatus: status }),
 
-  setProfileOpen: (open) => set({ 
-    isProfileOpen: open, 
-    selectedStatus: null 
-  }),
-  
-  setCurrentUser: (user) => set({ currentUser: user }),
-}));
+      setFilterAuthors: (authors) => {
+        set({ filterAuthors: authors });
+        get().applyFilters();
+      },
+
+      setFilterCategories: (categories) => {
+        set({ filterCategories: categories });
+        get().applyFilters();
+      },
+
+      setLoading: (loading) => set({ isLoading: loading }),
+
+      setProfileOpen: (open) => set({
+        isProfileOpen: open,
+        selectedStatus: null
+      }),
+
+      setCurrentUser: (user) => set({ currentUser: user }),
+    }),
+    {
+      name: 'sults-dashboard-storage',
+      partialize: (state) => ({ 
+        isProfileOpen: state.isProfileOpen, 
+        selectedStatus: state.selectedStatus,
+        searchTerm: state.searchTerm
+      }),
+    }
+  )
+);

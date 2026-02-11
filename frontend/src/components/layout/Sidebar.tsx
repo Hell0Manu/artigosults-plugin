@@ -1,14 +1,12 @@
 import { useState } from "react";
-// import { Link, useLocation } from "react-router-dom";
-import { 
-  Network, Settings, LogOut, Headset, Moon, Sun, Home, ChevronRight, Menu
-} from "lucide-react"; 
 import { cn } from "@/lib/utils"; 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
+import { useDashboardStore } from "@/store/useDashboardStore"; 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Network, Settings, LogOut, Headset, Moon, Sun, Home, ChevronRight, Menu } from "lucide-react"; 
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { useDashboardStore } from "@/store/useDashboardStore";
 
 const menuItems = [
   { label: "Dashboard", icon: Home, path: "/" },
@@ -17,16 +15,15 @@ const menuItems = [
 ];
 
 export function Sidebar() {
-  // const location = useLocation();
-  const [activeTab, setActiveTab] = useState("/");
+  const location = useLocation();
+  const { currentUser, setProfileOpen } = useDashboardStore();
 
-  const { theme, setTheme } = useTheme(); 
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  const { theme, setTheme } = useTheme(); 
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
-  const toggleTheme = () => {setTheme(theme === "dark" ? "light" : "dark");};
-  const { currentUser, setProfileOpen } = useDashboardStore();
-  
+  const toggleTheme = () => {setTheme(theme === "dark" ? "light" : "dark");};  
   
   {/* Ícone de Hamburger */}
   const ToggleButton = () => (
@@ -76,7 +73,7 @@ export function Sidebar() {
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
-              <button
+              <Link
                 key={item.path}
                 to={item.path}
                 title={collapsed ? item.label : ""} 
@@ -97,7 +94,7 @@ export function Sidebar() {
                 )}>
                   {item.label}
                 </span>
-              </button>
+              </Link>
             );
           })}
         </nav>
@@ -129,7 +126,7 @@ export function Sidebar() {
           {(() => {
             const isSupportActive = location.pathname === "/support";
             return (
-              <button
+              <Link
                 to="/support"
                 title={collapsed ? "Suporte" : ""}
                 onClick={() => isMobile && setIsMobileOpen(false)}
@@ -157,7 +154,7 @@ export function Sidebar() {
                 )}>
                   Suporte
                 </span>
-              </button>
+              </Link>
             );
           })()}
 
@@ -182,7 +179,8 @@ export function Sidebar() {
           </button>
 
           {/* Card de Usuário */}
-         <button 
+         <Link
+         to="/perfil"
             onClick={() => {
               setProfileOpen(true); 
               if (isMobile) setIsMobileOpen(false);
@@ -211,7 +209,7 @@ export function Sidebar() {
             </div>
 
             {showText && <ChevronRight size={16} className="text-zinc-600 group-hover:text-zinc-400 shrink-0" />}
-          </button>
+          </Link>
         </div>
       </div>
     );

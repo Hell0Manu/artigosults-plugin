@@ -1,5 +1,6 @@
 import { PostCard } from "./PostCard";
 import type { WPPost } from "@/types";
+import { useNavigate } from "react-router-dom";
 import { useDashboardStore } from "@/store/useDashboardStore";
 import { DashboardSkeleton } from "./Skeleton/DashboardSkeleton"
 
@@ -9,7 +10,7 @@ interface PostGridProps {
 }
 
 export function PostGrid({ posts, isLoading }: PostGridProps) {
-
+  const navigate = useNavigate();
   const { setSelectedStatus } = useDashboardStore();
 
   if (isLoading) {
@@ -43,7 +44,7 @@ export function PostGrid({ posts, isLoading }: PostGridProps) {
           >
             {/* Cabeçalho da Coluna */}
             <button 
-              onClick={() => setSelectedStatus(col.slug as any)}
+              onClick={() => navigate(`/status/${col.slug}`)}
               className={`flex cursor-pointer items-center gap-3 p-2 rounded-full mb-4 flex-shrink-0 transition-transform active:scale-95 hover:brightness-110 ${col.color}`}
             >
               <div className="flex items-center justify-center bg-white text-slate-900 text-sm font-bold px-3 py-1.5 rounded-full">
