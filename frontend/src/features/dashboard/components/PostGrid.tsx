@@ -61,7 +61,7 @@ export function PostGrid({ posts, isLoading }: PostGridProps) {
                   title={post.title}
                   date={post.date}
                   commentsCount={11}
-                  authors={post.author?.avatarUrl ? [post.author.avatarUrl] : ["https://placehold.co/32x32"]}
+                   authors={post.authors || []}
                   status={{ 
                     label: col.title, 
                     color: col.color 

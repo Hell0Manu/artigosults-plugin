@@ -6,17 +6,29 @@ import {
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useNavigate } from "react-router-dom"; 
+import { useDashboardStore } from "@/store/useDashboardStore"; 
+import type { WPUser } from "@/types";
 
 interface PostModalBreafingProps {
   title: string;
   status: { label: string; color: string };
   category: { label: string; color: string };
-  authors: string[];
+  authors: WPUser[]; 
 }
 
 export function PostModalBreafing({ title, category, status, authors }: PostModalBreafingProps) {
+    const navigate = useNavigate();
+    const { setViewedUser } = useDashboardStore();
+
+    const handleAuthorClick = (author: WPUser) => {
+        setViewedUser(author); 
+        navigate("/perfil");   
+    };
+
     return (
-      <DialogContent className="rounded-[24px] bg-white border-none shadow-lg max-h-[90dvh] overflow-y-auto custom-scrollbar">      <DialogHeader className="gap-2">
+      <DialogContent className="rounded-[24px] bg-background border-none shadow-lg max-h-[90dvh] overflow-y-auto custom-scrollbar">
+      <DialogHeader className="gap-2">
        <div className="flex gap-3">
           <Badge className={`w-fit rounded-full border-none ${status.color}`}>
             {status.label}
@@ -25,23 +37,33 @@ export function PostModalBreafing({ title, category, status, authors }: PostModa
             {category.label}
           </Badge>
         </div>
-        <DialogTitle className="text-2xl font-bold text-left leading-tight text-[#1E293B]">
+        <DialogTitle className="text-2xl font-bold text-left leading-tight text-foreground">
           {title}
         </DialogTitle>
-        <DialogDescription className="text-left pt-2 text-base text-slate-500">
+        <DialogDescription className="text-left pt-2 text-base text-muted-foreground">
           Este briefing contém os detalhes fundamentais para a produção deste conteúdo editorial.
         </DialogDescription>
       </DialogHeader>
 
-      <div className="py-6 border-t border-slate-100 mt-4">
-        <p className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Equipa Editorial</p>
+      <div className="py-6 border-t border-border mt-4">
+        <p className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">Equipa Editorial</p>
         <div className="flex gap-3">
-          {authors.map((url, index) => (
-            <div key={index} className="flex flex-col items-center gap-2">
-              <Avatar className="w-12 h-12 border-2 border-slate-50">
-                <AvatarImage src={url} />
-                <AvatarFallback>U</AvatarFallback>
+          {authors.map((author, index) => (
+            <div 
+                key={index} 
+                onClick={() => handleAuthorClick(author)}
+                className="flex flex-col items-center gap-2 cursor-pointer group transition-all active:scale-95"
+                title={`Ver perfil de ${author.name}`}
+            >
+              <Avatar className="w-12 h-12 border-2 border-background shadow-sm group-hover:border-brand transition-colors">
+                <AvatarImage src={author.avatarUrl} />
+                <AvatarFallback className="bg-muted text-muted-foreground font-bold">
+                    {author.name ? author.name.substring(0,2).toUpperCase() : "U"}
+                </AvatarFallback>
               </Avatar>
+              <span className="text-xs font-medium text-foreground group-hover:text-brand transition-colors">
+                {author.name}
+              </span>
             </div>
           ))}
         </div>

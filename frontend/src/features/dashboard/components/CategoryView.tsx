@@ -99,7 +99,7 @@ export function CategoryView() {
                 label: post.category, 
                 color: categoryColors[post.category] || "bg-muted text-muted-foreground" 
               }}
-              authors={post.author?.avatarUrl ? [post.author.avatarUrl] : ["https://placehold.co/32x32"]}
+               authors={post.authors || []}
               commentsCount={post.commentsCount || 0}
               status={{ 
                 label: statusLabels[currentStatus], 

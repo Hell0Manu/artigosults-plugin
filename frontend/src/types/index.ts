@@ -11,6 +11,7 @@ export type WPPostStatus =
 export interface WPUser {
   id: string;
   name: string;
+  email?: string;
   avatarUrl?: string;
   role: string;
   coverUrl?: string;
@@ -20,11 +21,10 @@ export interface WPUser {
 export interface WPPost {
   id: string;
   title: string;
-  date: string;         // Formato ISO: "2026-02-10"
+  date: string;         
   status: WPPostStatus; 
-  authorName: string;   
-  author?: WPUser;    
-  excerpt?: string;     // Resumo do post
+  authors: WPUser[];    
+  excerpt?: string;     
   category: string;
   commentsCount?: number;
 }

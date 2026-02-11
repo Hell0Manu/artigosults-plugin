@@ -1,4 +1,3 @@
-// src/App.tsx
 import { Search } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { PostGrid } from "@/features/dashboard";
@@ -38,7 +37,6 @@ function DashboardHome() {
 
   return (
     <div className="w-full h-[100dvh] flex flex-col overflow-hidden">
-      {/* Header */}
       <header className="flex-shrink-0 w-full mb-6">
         <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 w-full">
           <h1 className="text-2xl md:text-[30px] font-[800] text-foreground leading-tight"> 
@@ -100,7 +98,7 @@ function DashboardHome() {
                   {...post} 
                   category={{ label: post.category, color: "bg-brand/10 text-brand" }}
                   status={{ label: 'Publicado', color: 'bg-brand text-white' }} 
-                  authors={post.author?.avatarUrl ? [post.author.avatarUrl] : ["https://placehold.co/32x32"]} 
+                   authors={post.authors || []}
                   commentsCount={post.commentsCount || 0} 
                 />
               ))}
