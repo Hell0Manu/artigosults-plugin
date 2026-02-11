@@ -1,10 +1,11 @@
 import { create } from 'zustand';
-import type { WPPost, WPPostStatus, WPAuthor } from "@/types";
+import type { WPPost, WPPostStatus, WPUser } from "@/types";
 
 interface DashboardState {
+  currentUser: WPUser | null;
   allPosts: WPPost[]; 
   posts: WPPost[];   
-  authors: WPAuthor[];
+  authors: WPUser[];
   categories: string[];
   isLoading: boolean;
   searchTerm: string;
@@ -18,9 +19,13 @@ interface DashboardState {
   setFilterCategories: (categories: string[]) => void;
   setLoading: (loading: boolean) => void;
   applyFilters: () => void;
+
+  isProfileOpen: boolean;
+  setProfileOpen: (open: boolean) => void;
+  setCurrentUser: (user: WPUser | null) => void;
 }
 
-const MOCK_AUTHORS: Record<string, WPAuthor> = {
+const MOCK_AUTHORS: Record<string, WPUser> = {
   emanuelle: { id: "1", name: "Emanuelle", avatarUrl: "https://i.pravatar.cc/150?u=emanuelle", role: "Editora Chefe" },
   marcos: { id: "2", name: "Marcos", avatarUrl: "https://i.pravatar.cc/150?u=marcos", role: "Redator Pleno" },
   ricardo: { id: "3", name: "Ricardo", avatarUrl: "https://i.pravatar.cc/150?u=ricardo", role: "Revisor" },
@@ -64,7 +69,17 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
   selectedStatus: null,
   filterAuthors: [],
   filterCategories: [],
+  isProfileOpen: false,
 
+  currentUser: {
+    id: "1",
+    name: "Emanuelle",
+    email: "emanuelle@sults.com",
+    avatarUrl: "https://i.pravatar.cc/150?u=emanuelle", 
+    role: "Editora Chefe",
+    coverUrl: "https://placehold.co/1200x400/00ACAC/white?text="
+  },
+  
   applyFilters: () => {
     const { allPosts, searchTerm, filterAuthors, filterCategories } = get();
     
@@ -96,4 +111,11 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
   },
 
   setLoading: (loading) => set({ isLoading: loading }),
+
+  setProfileOpen: (open) => set({ 
+    isProfileOpen: open, 
+    selectedStatus: null 
+  }),
+  
+  setCurrentUser: (user) => set({ currentUser: user }),
 }));

@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MultiSelect } from "./MultiSelect";
-import type { WPAuthor } from "@/types";
+import type { WPUser } from "@/types";
 import { useDashboardStore } from "@/store/useDashboardStore";
 
 export function FilterBar() {
@@ -16,7 +16,7 @@ export function FilterBar() {
   return (
     <div className="flex flex-wrap items-center gap-2 bg-transparent">      
       {/* MultiSelect autores */}
-      <MultiSelect<WPAuthor>
+      <MultiSelect<WPUser>
         title="Autores"
         options={authors}
         selectedValues={filterAuthors}

@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/theme-provider";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { useDashboardStore } from "@/store/useDashboardStore";
 
 const menuItems = [
   { label: "Dashboard", icon: Home, path: "/" },
@@ -24,6 +25,8 @@ export function Sidebar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const toggleSidebar = () => setIsCollapsed(!isCollapsed);
   const toggleTheme = () => {setTheme(theme === "dark" ? "light" : "dark");};
+  const { currentUser, setProfileOpen } = useDashboardStore();
+  
   
   {/* Ícone de Hamburger */}
   const ToggleButton = () => (
@@ -179,27 +182,31 @@ export function Sidebar() {
           </button>
 
           {/* Card de Usuário */}
-          <button 
-            to="/profile"
-            onClick={() => isMobile && setIsMobileOpen(false)}
+         <button 
+            onClick={() => {
+              setProfileOpen(true); 
+              if (isMobile) setIsMobileOpen(false);
+            }}
             className={cn(
-              "flex w-full items-center gap-3 rounded-xl border border-transparent p-2 transition-colors hover:bg-zinc-800 group",
+              "flex w-full items-center gap-3 rounded-xl border border-transparent p-2 transition-colors hover:bg-zinc-800 group cursor-pointer",
               collapsed && "justify-center border-0 p-0"
             )}
           >
-            <Avatar className="h-9 w-9 border border-zinc-700 cursor-pointer shrink-0">
-              <AvatarImage src="" /> 
+            <Avatar className="h-9 w-9 border border-zinc-700 shrink-0">
+              {/* Foto do usuário */}
+              <AvatarImage src={currentUser?.avatarUrl} alt={currentUser?.name} /> 
               <AvatarFallback className="bg-brand text-white text-xs font-bold">
-                {user.name?.substring(0, 2).toUpperCase() || "EU"}
+                {currentUser?.name?.substring(0, 2).toUpperCase() || "EU"}
               </AvatarFallback>
             </Avatar>
             
             <div className={cn("flex-1 overflow-hidden transition-all duration-300 text-left", showText ? "w-auto block" : "w-0 hidden")}>
+              {/* Nome e Email */}
               <p className="truncate text-sm font-semibold text-zinc-200 group-hover:!text-white">
-                {user.name}
+                {currentUser?.name || "Usuário"}
               </p>
-              <p className="truncate text-xs text-zinc-500">
-                {user.email || user.user_email || "redator@sults.com"}
+              <p className="truncate text-[10px] text-zinc-500 font-medium leading-none mt-1">
+                {currentUser?.email || "usuario@sults.com"}
               </p>
             </div>
 

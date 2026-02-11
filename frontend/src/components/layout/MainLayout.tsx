@@ -17,7 +17,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background text-foreground transition-colors duration-300 font-jakarta">
       <Sidebar />
-      <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-10 custom-scrollbar">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 custom-scrollbar">
         <div className="space-y-6 animate-in fade-in duration-500">
           {children}
         </div>

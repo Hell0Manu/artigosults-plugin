@@ -7,20 +7,31 @@ import { FilterBar } from "@/features/dashboard/components/FilterBar";
 import { MainLayout } from "./components/layout/MainLayout";
 import { useDashboardStore } from "@/store/useDashboardStore"; 
 import { PostCard } from "./features/dashboard/components/PostCard";
+import { ProfileView } from "./features/dashboard/components/ProfileView";
 
 export default function App() {
-  const { 
+const { 
     posts, 
     isLoading,
     searchTerm, 
     setSearchTerm,
     selectedStatus, 
-    setSelectedStatus
+    setSelectedStatus,
+    isProfileOpen, 
+    setProfileOpen 
   } = useDashboardStore();
 
   const allCount = posts.length;
   const publishedPosts = posts.filter(p => p.status === 'publish');
   const publishedCount = publishedPosts.length;
+
+  if (isProfileOpen) {
+    return (
+      <MainLayout>
+        <ProfileView />
+      </MainLayout>
+    );
+  }
 
   if (selectedStatus) {
     return (
