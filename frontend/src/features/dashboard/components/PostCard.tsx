@@ -22,7 +22,7 @@ export function PostCard({ title, category, status, commentsCount, date, authors
 
   const handleAvatarClick = (e: React.MouseEvent, author: Author) => {
     e.stopPropagation(); 
-    setViewedUser(author as any); 
+    setViewedUser({...author, role: author.role || "Colaborador", email: author.email || ""  });
     navigate("/perfil");   
   };
 

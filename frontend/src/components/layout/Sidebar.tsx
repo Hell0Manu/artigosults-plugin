@@ -160,7 +160,7 @@ export function Sidebar() {
 
           {/* Botão Sair */}
           <button
-            onClick={() => window.location.href }
+            onClick={() => window.location.href = "/wp-login.php?action=logout"}
             title={collapsed ? "Sair" : ""}
             className={cn(
               "w-full flex items-center gap-4 rounded-lg p-3 transition-all duration-200 group relative cursor-pointer",

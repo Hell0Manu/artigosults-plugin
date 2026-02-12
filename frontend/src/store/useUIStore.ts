@@ -11,7 +11,6 @@ interface UIState {
   searchTerm: string;
   filterAuthors: string[];
   filterCategories: string[];
-  isProfileOpen: boolean; // ver viabilidade de retirar
 
   // Ações
   setSearchTerm: (term: string) => void;
@@ -37,7 +36,6 @@ export const useUIStore = create<UIState>()(
       searchTerm: "",
       filterAuthors: [],
       filterCategories: [],
-      isProfileOpen: false,
 
       setSearchTerm: (term) => set({ searchTerm: term }),
       setFilterAuthors: (authors) => set({ filterAuthors: authors }),

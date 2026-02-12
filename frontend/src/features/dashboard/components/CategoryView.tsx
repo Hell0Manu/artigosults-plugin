@@ -1,6 +1,4 @@
 import { PostCard } from "./PostCard";
-import { FilterBar } from "./FilterBar";
-import { Search, ChevronLeft } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUIStore } from "@/store/useUIStore"; 
 import { useDashboardPosts } from "@/features/dashboard/hooks/useDashboardPosts";
@@ -17,8 +15,6 @@ export function CategoryView({ isUserProfile = false }: { isUserProfile?: boolea
 
   // Pega estado de UI da Store correta
   const { 
-    searchTerm, 
-    setSearchTerm,
     currentUser, 
     viewedUser   
   } = useUIStore();

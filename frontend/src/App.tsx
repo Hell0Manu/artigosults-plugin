@@ -14,18 +14,11 @@ import { DashboardSkeleton } from "./features/dashboard/components/Skeleton/Dash
 function DashboardHome() {
   // Hook para dados
   const { posts, isLoading } = useDashboardPosts(); 
-  
   const { fetchInitialData } = usePostsStore();
 
-  // Store de Dados (apenas para controlar o loading inicial)
-  const { setLoading } = usePostsStore(); 
-
   useEffect(() => {
-    fetchInitialData();
-    setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 1500); 
-    return () => clearTimeout(timer);
-  }, [fetchInitialData]);
+      fetchInitialData();
+    }, [fetchInitialData]);
 
   const allCount = posts.length;
   const publishedPosts = posts.filter(p => p.status === 'publish');
