@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils"; 
+import { useUIStore } from "@/store/useUIStore";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
-import { useDashboardStore } from "@/store/useDashboardStore"; 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Network, Settings, LogOut, Headset, Moon, Sun, Home, ChevronRight, Menu } from "lucide-react"; 
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
@@ -16,7 +16,7 @@ const menuItems = [
 
 export function Sidebar() {
   const location = useLocation();
-  const { currentUser, setProfileOpen, setViewedUser } = useDashboardStore();
+  const { currentUser, setViewedUser } = useUIStore();
 
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -39,7 +39,7 @@ export function Sidebar() {
     </button>
   );
 
-  const user = window.sultsSettings?.user || { name: "Usuário", email: "redator@sults.com" };
+  const user = { name: "Usuário", email: "redator@sults.com" };
 
   const SidebarContent = ({ isMobile = false }: { isMobile?: boolean }) => {
     const collapsed = isMobile ? false : isCollapsed;
@@ -160,7 +160,7 @@ export function Sidebar() {
 
           {/* Botão Sair */}
           <button
-            onClick={() => window.location.href = window.sultsSettings?.adminUrl}
+            onClick={() => window.location.href }
             title={collapsed ? "Sair" : ""}
             className={cn(
               "w-full flex items-center gap-4 rounded-lg p-3 transition-all duration-200 group relative cursor-pointer",
@@ -181,9 +181,8 @@ export function Sidebar() {
           {/* Card de Usuário */}
          <Link
          to="/perfil"
-            onClick={() => {
-              setProfileOpen(true); 
-              setViewedUser(null);
+            onClick={() => { 
+              setViewedUser(currentUser);
               if (isMobile) setIsMobileOpen(false);
             }}
             className={cn(
@@ -195,7 +194,7 @@ export function Sidebar() {
               {/* Foto do usuário */}
               <AvatarImage src={currentUser?.avatarUrl} alt={currentUser?.name} /> 
               <AvatarFallback className="bg-brand text-white text-xs font-bold">
-                {currentUser?.name?.substring(0, 2).toUpperCase() || "EU"}
+                {currentUser?.name ? currentUser.name.substring(0, 2).toUpperCase() : "EU"}
               </AvatarFallback>
             </Avatar>
             

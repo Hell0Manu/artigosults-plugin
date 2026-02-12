@@ -2,20 +2,30 @@ import { PostCard } from "./PostCard";
 import { FilterBar } from "./FilterBar";
 import { Search, ChevronLeft } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDashboardStore } from "@/store/useDashboardStore";
+import { useUIStore } from "@/store/useUIStore"; 
+import { useDashboardPosts } from "@/features/dashboard/hooks/useDashboardPosts";
+import { POST_STATUS_LABELS, POST_STATUS_COLORS, POST_CATEGORY_COLORS } from "@/domain/post/post.constants";
+import type { PostStatus } from "@/domain/post/post.types";
 
-export function CategoryView({ isUserProfile = false }: { isUserProfile?: boolean }) {  const { slug } = useParams(); 
+export function CategoryView({ isUserProfile = false }: { isUserProfile?: boolean }) {  
+  const { slug } = useParams(); 
   const navigate = useNavigate();
 
+  // Pega os Posts
+  const { posts } = useDashboardPosts();
+
+  // Pega estado de UI da Store correta
   const { 
-    posts, 
     searchTerm, 
     setSearchTerm,
     currentUser, 
     viewedUser   
-  } = useDashboardStore();
+  } = useUIStore();
 
-  const currentStatus = slug || "draft";
+  // Garante que o status é válido ou cai para 'draft'
+  const currentStatus = (slug as PostStatus) || "draft"; 
+
+  // Filtra por status (Rascunho, Publicado, etc)
   let categoryPosts = posts.filter(p => p.status === currentStatus);
 
   if (isUserProfile) {
@@ -27,29 +37,8 @@ export function CategoryView({ isUserProfile = false }: { isUserProfile?: boolea
     }
   }
 
-  const statusLabels: Record<string, string> = {
-    draft: "Rascunho",
-    pending: "Pendente",
-    publish: "Publicado",
-    in_progress: "Em andamento",
-    adjustment: "Precisa de ajuste"
-  };
-
-  const statusColors: Record<string, string> = {
-    draft: "bg-[#7E8D95]",
-    pending: "bg-[#F59E0B]",
-    publish: "bg-[#00ACAC]",
-    in_progress: "bg-[#00ACAC]",
-    adjustment: "bg-[#EF4444]"
-  };
-
-  const categoryColors: Record<string, string> = {
-    "Desenvolvimento": "bg-indigo-100 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400",
-    "Tecnologia": "bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-400",
-    "Design": "bg-purple-100 text-purple-600 dark:bg-purple-950 dark:text-purple-400",
-    "Marketing": "bg-orange-100 text-orange-600 dark:bg-orange-950 dark:text-orange-400",
-    "CMS": "bg-slate-100 text-foreground dark:bg-slate-800 dark:text-slate-300",
-  };
+  // Define a cor de fundo do cabeçalho
+  const headerColor = POST_STATUS_COLORS[currentStatus] || "bg-slate-500";
 
   return (
     <div className="flex-1 flex flex-col h-full font-jakarta animate-in fade-in duration-500">
@@ -58,7 +47,7 @@ export function CategoryView({ isUserProfile = false }: { isUserProfile?: boolea
         <div className={`
           w-full p-2 lg:pr-6 lg:pl-2 rounded-[2rem]
           flex flex-col xl:flex-row items-center justify-between gap-4
-          ${statusColors[currentStatus] || "bg-slate-500"}
+          ${headerColor}
           shadow-lg
         `}>
           <div className="flex items-center gap-3 w-full xl:w-auto justify-start pl-2 md:pl-0">
@@ -75,7 +64,7 @@ export function CategoryView({ isUserProfile = false }: { isUserProfile?: boolea
                 {categoryPosts.length}
               </span>
               <h2 className="text-white text-lg md:text-xl font-bold capitalize truncate">
-                {statusLabels[currentStatus]}
+                {POST_STATUS_LABELS[currentStatus]}
                 {isUserProfile && (viewedUser || currentUser) && (
                    <span className="opacity-70 font-normal ml-2 text-base">
                      de {(viewedUser || currentUser)?.name.split(' ')[0]}
@@ -112,13 +101,16 @@ export function CategoryView({ isUserProfile = false }: { isUserProfile?: boolea
               {...post}
               category={{ 
                 label: post.category, 
-                color: categoryColors[post.category] || "bg-muted text-muted-foreground" 
+                color: POST_CATEGORY_COLORS[post.category] || "bg-muted text-muted-foreground" 
               }}
-               authors={post.authors || []}
+              authors={post.authors.map(a => ({
+                     ...a,
+                     role: a.role || "Colaborador"
+                  }))}
               commentsCount={post.commentsCount || 0}
               status={{ 
-                label: statusLabels[currentStatus], 
-                color: statusColors[currentStatus] 
+                label: POST_STATUS_LABELS[currentStatus], 
+                color: POST_STATUS_COLORS[currentStatus]
               }}
             />
           ))}

@@ -105,7 +105,7 @@ export function MultiSelect<T>({
                 >
                   <Check className={cn("h-3 w-3")} />
                 </div>
-                <span className="font-bold text-slate-700">Todos</span>
+                <span className="font-bold text-foreground">Todos</span>
               </CommandItem>
             </CommandGroup>
             
@@ -137,7 +137,7 @@ export function MultiSelect<T>({
                     </div>
                     
                     {/* Avatar + Nome + Role ou Texto Simples */}
-                    {renderOption ? renderOption(item) : <span className="font-medium text-slate-700">{label}</span>}
+                    {renderOption ? renderOption(item) : <span className="font-medium text-foreground">{label}</span>}
                   </CommandItem>
                 );
               })}

@@ -1,22 +1,27 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MultiSelect } from "./MultiSelect";
+// src/features/dashboard/components/FilterBar.tsx
 import type { WPUser } from "@/types";
-import { useDashboardStore } from "@/store/useDashboardStore";
+import { MultiSelect } from "./MultiSelect";
+import { useUIStore } from "@/store/useUIStore"; 
+import { usePostsStore } from "@/store/usePostsStore";
+import type { Author } from "@/domain/post/post.types";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function FilterBar() {
+  // Dados para popular os selects (vêm da store de DADOS)
+  const { authors, categories } = usePostsStore();
+
+  // Estado dos filtros (vêm da store de UI)
   const { 
-    authors, 
-    categories, 
     filterAuthors, 
     setFilterAuthors, 
     filterCategories, 
     setFilterCategories 
-  } = useDashboardStore();
+  } = useUIStore();
 
   return (
     <div className="flex flex-wrap items-center gap-2 bg-transparent">      
       {/* MultiSelect autores */}
-      <MultiSelect<WPUser>
+      <MultiSelect<Author>
         title="Autores"
         options={authors}
         selectedValues={filterAuthors}

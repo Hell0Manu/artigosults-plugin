@@ -1,28 +1,23 @@
-import {
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useNavigate } from "react-router-dom"; 
-import { useDashboardStore } from "@/store/useDashboardStore"; 
-import type { WPUser } from "@/types";
+import { useUIStore } from "@/store/useUIStore"; 
+import type { Author } from "@/domain/post/post.types"; 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { DialogContent, DialogDescription, DialogHeader, DialogTitle,} from "@/components/ui/dialog"
 
 interface PostModalBreafingProps {
   title: string;
   status: { label: string; color: string };
   category: { label: string; color: string };
-  authors: WPUser[]; 
+  authors: Author[]; 
 }
 
 export function PostModalBreafing({ title, category, status, authors }: PostModalBreafingProps) {
     const navigate = useNavigate();
-    const { setViewedUser } = useDashboardStore();
+    const { setViewedUser } = useUIStore();
 
-    const handleAuthorClick = (author: WPUser) => {
-        setViewedUser(author); 
+    const handleAuthorClick = (author: Author) => {
+        setViewedUser(author as any); 
         navigate("/perfil");   
     };
 

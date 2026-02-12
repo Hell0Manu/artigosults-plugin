@@ -1,25 +1,27 @@
-import { Search } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { PostGrid } from "@/features/dashboard";
-import { CategoryView } from "./features/dashboard/components/CategoryView";
-import { FilterBar } from "@/features/dashboard/components/FilterBar";
-import { MainLayout } from "./components/layout/MainLayout";
-import { useDashboardStore } from "@/store/useDashboardStore"; 
-import { PostCard } from "./features/dashboard/components/PostCard";
-import { ProfileView } from "./features/dashboard/components/ProfileView";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { DashboardSkeleton } from "./features/dashboard/components/Skeleton/DashboardSkeleton";
 import { useEffect } from "react";
+import { Search } from "lucide-react";
+import { PostGrid } from "@/features/dashboard";
+import { useUIStore } from "@/store/useUIStore";
+import { usePostsStore } from "@/store/usePostsStore";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { MainLayout } from "./components/layout/MainLayout";
+import { PostCard } from "./features/dashboard/components/PostCard";
+import { FilterBar } from "@/features/dashboard/components/FilterBar";
+import { ProfileView } from "./features/dashboard/components/ProfileView";
+import { CategoryView } from "./features/dashboard/components/CategoryView";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useDashboardPosts } from "@/features/dashboard/hooks/useDashboardPosts";
+import { DashboardSkeleton } from "./features/dashboard/components/Skeleton/DashboardSkeleton";
 
 function DashboardHome() {
-  const { 
-    posts, 
-    isLoading,
-    setLoading, 
-    searchTerm, 
-    setSearchTerm,
-    setSelectedStatus 
-  } = useDashboardStore();
+  // Hook para dados
+  const { posts, isLoading } = useDashboardPosts(); 
+  
+  // Store para UI (Busca)
+  const { searchTerm, setSearchTerm } = useUIStore();
+
+  // Store de Dados (apenas para controlar o loading inicial)
+  const { setLoading } = usePostsStore(); 
 
   useEffect(() => {
     setLoading(true);
@@ -38,7 +40,7 @@ function DashboardHome() {
   return (
     <div className="w-full h-[100dvh] flex flex-col overflow-hidden">
       <header className="flex-shrink-0 w-full mb-6">
-        <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 w-full">
+        <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 w-full mt-2">
           <h1 className="text-2xl md:text-[30px] font-[800] text-foreground leading-tight"> 
             Dashboard 
           </h1>
@@ -64,7 +66,6 @@ function DashboardHome() {
           <TabsList className="bg-transparent justify-start h-12 p-0 gap-8 rounded-none">
             <TabsTrigger 
               value="status" 
-              onClick={() => setSelectedStatus(null)}
               className="px-0 bg-transparent shadow-none outline-none ring-0 focus-visible:ring-0 data-[state=active]:bg-transparent data-[state=active]:border-b-brand data-[state=active]:text-brand text-muted-foreground font-bold rounded-none border-b-2 border-transparent transition-all"
             >
               Por status 
@@ -87,7 +88,7 @@ function DashboardHome() {
 
         <div className="flex-1 overflow-hidden">
           <TabsContent value="status" className="h-full m-0 outline-none">
-              <PostGrid posts={posts} isLoading={isLoading} /> 
+              <PostGrid posts={posts.map(p => ({ ...p, authors: p.authors.map(a => ({ ...a, role: a.role || "Colaborador" })) }))} isLoading={isLoading} />
           </TabsContent>
 
           <TabsContent value="publicados" className="h-full m-0 outline-none overflow-y-auto custom-scrollbar">
@@ -98,7 +99,10 @@ function DashboardHome() {
                   {...post} 
                   category={{ label: post.category, color: "bg-brand/10 text-brand" }}
                   status={{ label: 'Publicado', color: 'bg-brand text-white' }} 
-                   authors={post.authors || []}
+                  authors={post.authors.map(a => ({
+                     ...a,
+                     role: a.role || "Colaborador"
+                  }))}
                   commentsCount={post.commentsCount || 0} 
                 />
               ))}

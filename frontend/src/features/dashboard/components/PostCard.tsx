@@ -1,11 +1,11 @@
-import { MessageSquare, Calendar } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
+import { useUIStore } from "@/store/useUIStore"; 
+import { MessageSquare, Calendar } from "lucide-react";
+import type { Author } from "@/domain/post/post.types";
 import { PostModalBreafing } from "./PostModalBreafing";
-import type { WPUser } from "@/types";
-import { useDashboardStore } from "@/store/useDashboardStore"; 
-import { useNavigate } from "react-router-dom"; 
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface PostCardProps {
   title: string;
@@ -13,16 +13,16 @@ interface PostCardProps {
   status: { label: string; color: string };
   commentsCount: number;
   date: string;
-  authors: WPUser[];
+  authors: Author[];
 }
 
 export function PostCard({ title, category, status, commentsCount, date, authors }: PostCardProps) {
   const navigate = useNavigate();
-  const { setViewedUser } = useDashboardStore();
+  const { setViewedUser } = useUIStore();
 
-  const handleAvatarClick = (e: React.MouseEvent, author: WPUser) => {
+  const handleAvatarClick = (e: React.MouseEvent, author: Author) => {
     e.stopPropagation(); 
-    setViewedUser(author); 
+    setViewedUser(author as any); 
     navigate("/perfil");   
   };
 
@@ -43,7 +43,7 @@ export function PostCard({ title, category, status, commentsCount, date, authors
             </h3>
           </div>
 
-          <div className="flex items-center justify-between mt-2">
+           <div className="flex items-center justify-between mt-2">
             <div className="flex -space-x-2">
               {authors.map((author, index) => (
                 <div 
@@ -80,7 +80,7 @@ export function PostCard({ title, category, status, commentsCount, date, authors
         </div>
       </DialogTrigger>
 
-      <PostModalBreafing title={title} status={status} category={category} authors={authors} />
-    </Dialog>
+      <PostModalBreafing title={title} status={status} category={category} authors={authors} />    
+      </Dialog>
   );
 }

@@ -1,27 +1,39 @@
-import { ChevronLeft, Mail, Briefcase, Search } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useDashboardStore } from "@/store/useDashboardStore";
+
+
 import { PostGrid } from "./PostGrid";
 import { PostCard } from "./PostCard";
 import { FilterBar } from "./FilterBar";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import { useUIStore } from "@/store/useUIStore"; 
+import { ChevronLeft, Mail, Briefcase, Search } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useDashboardPosts } from "@/features/dashboard/hooks/useDashboardPosts"; 
 
 export function ProfileView() {
   const navigate = useNavigate();
+
+  // Dados
+  const { posts, isLoading } = useDashboardPosts();
+
+  //  UI
   const { 
     currentUser,
     viewedUser,   
-    posts, 
-    isLoading,
     searchTerm,
     setSearchTerm
-  } = useDashboardStore();
-
+  } = useUIStore();
 
   const profileUser = viewedUser || currentUser;
 
-  const userPosts = posts.filter(post => post.authors.some(a => a.name === profileUser?.name));
+  const userPosts = posts.filter(post => post.authors.some(a => a.name === profileUser?.name)
+  ).map(post => ({
+    ...post,
+    authors: post.authors.map(a => ({
+      ...a,
+      role: a.role || "Colaborador"
+    }))
+  }));
   const publishedUserPosts = userPosts.filter(p => p.status === 'publish');
 
   const handleBack = () => {
@@ -120,7 +132,10 @@ export function ProfileView() {
                   {...post} 
                   category={{ label: post.category, color: "bg-brand/10 text-brand" }}
                   status={{ label: 'Publicado', color: 'bg-brand' }} 
-                  authors={post.authors || []}
+                  authors={post.authors.map(a => ({
+                     ...a,
+                     role: a.role || "Colaborador"
+                  }))}
                   commentsCount={post.commentsCount || 0} 
                 />
               ))}

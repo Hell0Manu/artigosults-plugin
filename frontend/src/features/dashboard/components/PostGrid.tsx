@@ -1,8 +1,8 @@
 import { PostCard } from "./PostCard";
 import type { WPPost } from "@/types";
 import { useNavigate } from "react-router-dom";
-import { useDashboardStore } from "@/store/useDashboardStore";
 import { DashboardSkeleton } from "./Skeleton/DashboardSkeleton"
+import { POST_STATUS_COLORS, POST_CATEGORY_COLORS, POST_KANBAN_COLUMNS } from "@/domain/post/post.constants"; 
 
 interface PostGridProps {
   posts: WPPost[];
@@ -12,41 +12,22 @@ interface PostGridProps {
 
 export function PostGrid({ posts, isLoading, basePath = "/status" }: PostGridProps) {
   const navigate = useNavigate();
-  const { setSelectedStatus } = useDashboardStore();
 
-  if (isLoading) {
-    return <DashboardSkeleton />;
-  }
+  if (isLoading) { return <DashboardSkeleton />; }
 
-  const columns = [
-    { title: "Rascunhos", slug: "draft", color: "bg-accent-gray" },
-    { title: "Pendentes", slug: "pending", color: "bg-alert-warning" },
-    { title: "Em andamento", slug: "in_progress", color: "bg-alert-information" },
-    { title: "Precisa de ajuste", slug: "adjustment", color: "bg-alert-error" }
-  ];
-
-  const categoryColors: Record<string, string> = {
-    "Desenvolvimento": "bg-indigo-100 text-indigo-600",
-    "Tecnologia": "bg-blue-100 text-blue-600",
-    "Design": "bg-purple-100 text-purple-600",
-    "Marketing": "bg-orange-100 text-orange-600",
-    "CMS": "bg-slate-100 text-foreground",
-    "Segurança": "bg-red-100 text-red-600"
-  };
   return (
     <div className="flex gap-6 h-full overflow-x-auto items-start pb-10 custom-scrollbar">
-      {columns.map((col) => {
+      {POST_KANBAN_COLUMNS.map((col) => {
         const columnPosts = posts.filter((post) => post.status === col.slug);
+        const color = POST_STATUS_COLORS[col.slug];
 
         return (
           <div 
-            key={col.slug} 
-           className="w-[75vw] md:w-80 flex-shrink-0 flex flex-col max-h-full"
-          >
+            key={col.slug}  className="w-[75vw] md:w-80 flex-shrink-0 flex flex-col max-h-full">
             {/* Cabeçalho da Coluna */}
             <button 
               onClick={() => navigate(`${basePath}/${col.slug}`)}
-              className={`flex cursor-pointer items-center gap-3 p-2 rounded-full mb-4 flex-shrink-0 transition-transform active:scale-95 hover:brightness-110 ${col.color}`}
+              className={`flex cursor-pointer items-center gap-3 p-2 rounded-full mb-4 flex-shrink-0 transition-transform active:scale-95 hover:brightness-110 ${color}`}
             >
               <div className="flex items-center justify-center bg-white text-slate-900 text-sm font-bold px-3 py-1.5 rounded-full">
                 {columnPosts.length}
@@ -61,15 +42,12 @@ export function PostGrid({ posts, isLoading, basePath = "/status" }: PostGridPro
                   key={post.id}
                   title={post.title}
                   date={post.date}
-                  commentsCount={11}
-                   authors={post.authors || []}
-                  status={{ 
-                    label: col.title, 
-                    color: col.color 
-                  }}
+                  commentsCount={post.commentsCount || 0}
+                  authors={post.authors || []}
+                  status={{ label: col.title, color: color }}
                   category={{
                      label: post.category, 
-                    color: categoryColors[post.category]
+                     color: POST_CATEGORY_COLORS[post.category] || "bg-muted text-muted-foreground" 
                   }}
                 />
               ))}

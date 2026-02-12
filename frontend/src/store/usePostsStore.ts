@@ -1,42 +1,14 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import type { WPPost, WPPostStatus, WPUser } from "@/types";
+// import { User } from '@/domain/user/user.types';
+import type { Post, Author } from '@/domain/post/post.types'; 
 
-interface DashboardState {
-  currentUser: WPUser | null;
-  
-  allPosts: WPPost[];
-  viewedUser: WPUser | null;
-  posts: WPPost[];
-  authors: WPUser[];
-  categories: string[];
-  isLoading: boolean;
-  searchTerm: string;
-  selectedStatus: WPPostStatus | null;
-  filterAuthors: string[];
-  filterCategories: string[];
-
-  setSearchTerm: (term: string) => void;
-  setSelectedStatus: (status: WPPostStatus | null) => void;
-  setFilterAuthors: (authors: string[]) => void;
-  setFilterCategories: (categories: string[]) => void;
-  setLoading: (loading: boolean) => void;
-  applyFilters: () => void;
-
-  isProfileOpen: boolean;
-  setProfileOpen: (open: boolean) => void;
-
-  setViewedUser: (user: WPUser | null) => void;
-  setCurrentUser: (user: WPUser | null) => void;
-}
-
-const MOCK_AUTHORS: Record<string, WPUser> = {
+const MOCK_AUTHORS: Record<string, Author> = {
   emanuelle: { id: "1", name: "Emanuelle", email: "emanuelle@sults.com", avatarUrl: "https://i.pravatar.cc/150?u=emanuelle", role: "Editora Chefe" },
   marcos: { id: "2", name: "Marcos", email: "marcos@sults.com", avatarUrl: "https://i.pravatar.cc/150?u=marcos", role: "Redator Pleno" },
   ricardo: { id: "3", name: "Ricardo", email: "ricardo@sults.com", avatarUrl: "https://i.pravatar.cc/150?u=ricardo", role: "Revisor" },
 };
 
-const INITIAL_POSTS: WPPost[] = [
+const INITIAL_POSTS: Post[] = [
   { id: "1", title: "Guia de React 19", status: "publish", date: "2026-02-10", authors: [MOCK_AUTHORS.emanuelle, MOCK_AUTHORS.marcos], category: "Desenvolvimento", commentsCount: 5 },
   { id: "2", title: "Novidades do WordPress", status: "draft", date: "2026-02-09", authors: [MOCK_AUTHORS.marcos], category: "CMS", commentsCount: 2 },
   { id: "3", title: "Otimização de SEO", status: "pending", date: "2026-02-08", authors: [MOCK_AUTHORS.emanuelle, MOCK_AUTHORS.ricardo, MOCK_AUTHORS.marcos], category: "Marketing", commentsCount: 12 },
@@ -65,70 +37,21 @@ const INITIAL_POSTS: WPPost[] = [
   { id: "26", title: "Automação de deploy com Docker", status: "adjustment", date: "2026-01-16", authors: [MOCK_AUTHORS.marcos], category: "DevOps", commentsCount: 5 },
 ];
 
-export const useDashboardStore = create<DashboardState>()(
-  persist(
-    (set, get) => ({
-      allPosts: INITIAL_POSTS,
-      posts: INITIAL_POSTS,
-      authors: Array.from(new Map(INITIAL_POSTS.flatMap(p => p.authors).map(a => [a.name, a])).values()),
-      categories: Array.from(new Set(INITIAL_POSTS.map(p => p.category))),
-      isLoading: false,
-      searchTerm: "",
-      selectedStatus: null,
-      filterAuthors: [],
-      filterCategories: [],
-      isProfileOpen: false,
+interface PostsState {
+  posts: Post[];
+  authors: Author[];
+  categories: string[];
+  isLoading: boolean;
+  setPosts: (posts: Post[]) => void;
+  setLoading: (loading: boolean) => void;
+}
 
-      currentUser: MOCK_AUTHORS.emanuelle,
-      viewedUser: null,
-
-      applyFilters: () => {
-        const { allPosts, searchTerm, filterAuthors, filterCategories } = get();
-
-        const filtered = allPosts.filter(post => {
-          const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase());
-          const matchesAuthor = filterAuthors.length === 0 || post.authors.some(a => filterAuthors.includes(a.name));
-          const matchesCategory = filterCategories.length === 0 || filterCategories.includes(post.category);
-          return matchesSearch && matchesAuthor && matchesCategory;
-        });
-
-        set({ posts: filtered });
-      },
-
-      setSearchTerm: (term) => {
-        set({ searchTerm: term });
-        get().applyFilters();
-      },
-
-      setSelectedStatus: (status) => set({ selectedStatus: status }),
-
-      setFilterAuthors: (authors) => {
-        set({ filterAuthors: authors });
-        get().applyFilters();
-      },
-
-      setFilterCategories: (categories) => {
-        set({ filterCategories: categories });
-        get().applyFilters();
-      },
-
-      setLoading: (loading) => set({ isLoading: loading }),
-
-      setProfileOpen: (open) => set({
-        isProfileOpen: open,
-        selectedStatus: null
-      }),
-      setViewedUser: (user) => set({ viewedUser: user }),
-      setCurrentUser: (user) => set({ currentUser: user }),
-    }),
-    {
-      name: 'sults-dashboard-storage',
-      partialize: (state) => ({ 
-        isProfileOpen: state.isProfileOpen, 
-        selectedStatus: state.selectedStatus,
-        searchTerm: state.searchTerm,
-        viewedUser: state.viewedUser 
-      }),
-    }
-  )
-);
+export const usePostsStore = create<PostsState>((set) => ({
+  posts: INITIAL_POSTS,
+  authors: Object.values(MOCK_AUTHORS),
+  categories: Array.from(new Set(INITIAL_POSTS.map(p => p.category))),
+  isLoading: false,
+  
+  setPosts: (posts) => set({ posts }),
+  setLoading: (loading) => set({ isLoading: loading }),
+}));
