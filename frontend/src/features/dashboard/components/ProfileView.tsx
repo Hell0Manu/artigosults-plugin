@@ -36,10 +36,6 @@ export function ProfileView() {
   }));
   const publishedUserPosts = userPosts.filter(p => p.status === 'publish');
 
-  const handleBack = () => {
-    navigate(-1);
-  };
-
   if (!profileUser) return null;
 
   return (
@@ -53,14 +49,6 @@ export function ProfileView() {
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-          
-          <button 
-            onClick={handleBack}
-            className="absolute top-6 left-6 md:left-12 z-20 flex items-center gap-2 px-4 py-2 bg-black/20 hover:bg-black/40 backdrop-blur-md text-white rounded-full transition-all text-sm font-bold border border-white/20 shadow-lg active:scale-95"
-          >
-            <ChevronLeft size={18} />
-            Voltar
-          </button>
         </div>
 
         <div className="px-0 relative z-10 -mt-12 md:-mt-20 flex flex-col gap-6">

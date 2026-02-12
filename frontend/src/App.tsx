@@ -1,12 +1,10 @@
 import { useEffect } from "react";
-import { Search } from "lucide-react";
 import { PostGrid } from "@/features/dashboard";
-import { useUIStore } from "@/store/useUIStore";
 import { usePostsStore } from "@/store/usePostsStore";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { MainLayout } from "./components/layout/MainLayout";
+import { DashboardHeader } from "./components/DashboardHeader";
 import { PostCard } from "./features/dashboard/components/PostCard";
-import { FilterBar } from "@/features/dashboard/components/FilterBar";
 import { ProfileView } from "./features/dashboard/components/ProfileView";
 import { CategoryView } from "./features/dashboard/components/CategoryView";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -17,17 +15,17 @@ function DashboardHome() {
   // Hook para dados
   const { posts, isLoading } = useDashboardPosts(); 
   
-  // Store para UI (Busca)
-  const { searchTerm, setSearchTerm } = useUIStore();
+  const { fetchInitialData } = usePostsStore();
 
   // Store de Dados (apenas para controlar o loading inicial)
   const { setLoading } = usePostsStore(); 
 
   useEffect(() => {
+    fetchInitialData();
     setLoading(true);
     const timer = setTimeout(() => setLoading(false), 1500); 
     return () => clearTimeout(timer);
-  }, [setLoading]);
+  }, [fetchInitialData]);
 
   const allCount = posts.length;
   const publishedPosts = posts.filter(p => p.status === 'publish');
@@ -39,27 +37,7 @@ function DashboardHome() {
 
   return (
     <div className="w-full h-[100dvh] flex flex-col overflow-hidden">
-      <header className="flex-shrink-0 w-full mb-6">
-        <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 w-full mt-2">
-          <h1 className="text-2xl md:text-[30px] font-[800] text-foreground leading-tight"> 
-            Dashboard 
-          </h1>
-
-          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full justify-end">            
-            <FilterBar /> 
-            <div className="flex items-center gap-2 px-4 py-2 bg-card rounded-full border border-border shadow-sm focus-within:ring-2 focus-within:ring-brand w-full sm:w-auto transition-colors">
-              <input 
-                type="text"
-                placeholder="Pesquisar"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="text-card-foreground text-sm font-bold bg-transparent outline-none flex-1 sm:w-64 placeholder:text-muted-foreground"
-              />
-              <Search className="w-5 h-5 text-muted-foreground" />
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader title="Dashboard" />
 
       <Tabs defaultValue="status" className="flex flex-col h-full w-full space-y-6 overflow-hidden">
         <div className="w-full flex-shrink-0 border-b border-border m-0 mb-4">

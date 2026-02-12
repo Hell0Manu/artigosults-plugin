@@ -6,6 +6,7 @@ import { useUIStore } from "@/store/useUIStore";
 import { useDashboardPosts } from "@/features/dashboard/hooks/useDashboardPosts";
 import { POST_STATUS_LABELS, POST_STATUS_COLORS, POST_CATEGORY_COLORS } from "@/domain/post/post.constants";
 import type { PostStatus } from "@/domain/post/post.types";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 export function CategoryView({ isUserProfile = false }: { isUserProfile?: boolean }) {  
   const { slug } = useParams(); 
@@ -42,55 +43,23 @@ export function CategoryView({ isUserProfile = false }: { isUserProfile?: boolea
 
   return (
     <div className="flex-1 flex flex-col h-full font-jakarta animate-in fade-in duration-500">
-      <div className="flex flex-col gap-4 mb-8 flex-shrink-0">
-        {/* Header */}
-        <div className={`
-          w-full p-2 lg:pr-6 lg:pl-2 rounded-[2rem]
-          flex flex-col xl:flex-row items-center justify-between gap-4
-          ${headerColor}
-          shadow-lg
-        `}>
-          <div className="flex items-center gap-3 w-full xl:w-auto justify-start pl-2 md:pl-0">
-            {/* Botão Voltar */}
-            <button
-              onClick={() => isUserProfile ? navigate("/perfil") : navigate("/")}
-              className="bg-card hover:opacity-90 text-card-foreground w-8 h-8 rounded-full flex items-center justify-center shadow-sm active:scale-95 transition-all"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-2">
-              <span className="bg-white/20 text-white px-2 py-0.5 rounded-lg text-sm font-bold">
-                {categoryPosts.length}
-              </span>
-              <h2 className="text-white text-lg md:text-xl font-bold capitalize truncate">
-                {POST_STATUS_LABELS[currentStatus]}
-                {isUserProfile && (viewedUser || currentUser) && (
-                   <span className="opacity-70 font-normal ml-2 text-base">
-                     de {(viewedUser || currentUser)?.name.split(' ')[0]}
-                   </span>
-                )}
-              </h2>
-            </div>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-center gap-3 w-full xl:w-auto px-2 md:px-0 pb-2 xl:pb-0">
-            <FilterBar /> 
-
-            {/* Input de Busca */}
-            <div className="relative flex items-center group w-full md:w-64">
-              <input
-                type="text"
-                placeholder={`Pesquisar...`}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-4 pr-10 py-2 bg-card rounded-full border-none shadow-sm outline-none text-card-foreground text-sm font-bold placeholder:text-muted-foreground/60"
-              />
-              <Search className="absolute right-3.5 w-4 h-4 text-muted-foreground/60" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <DashboardHeader 
+        title={POST_STATUS_LABELS[currentStatus]}
+        className={headerColor}
+        showBackButton={true}
+        backPath={isUserProfile ? "/perfil" : "/"}
+        subtitle={
+          isUserProfile && (viewedUser || currentUser) ? (
+             <span className="opacity-70 font-normal ml-2 text-base text-white">
+               de {(viewedUser || currentUser)?.name.split(' ')[0]}
+             </span>
+          ) : null
+        }
+      >
+        <span className="bg-white/20 text-white px-2 py-0.5 rounded-lg text-sm font-bold ml-2">
+          {categoryPosts.length}
+        </span>
+      </DashboardHeader>
 
       {/* Grid de Conteúdo */}
       <div className="flex-1 overflow-y-auto custom-scrollbar">
