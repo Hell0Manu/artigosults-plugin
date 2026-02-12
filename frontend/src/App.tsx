@@ -10,6 +10,7 @@ import { CategoryView } from "./features/dashboard/components/CategoryView";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useDashboardPosts } from "@/features/dashboard/hooks/useDashboardPosts";
 import { DashboardSkeleton } from "./features/dashboard/components/Skeleton/DashboardSkeleton";
+import { SupportView } from "./features/dashboard/components/SupportView";
 
 function DashboardHome() {
   // Hook para dados
@@ -93,6 +94,10 @@ export default function App() {
         <Route path="/perfil" element={<ProfileView />} />
         <Route path="/status/:slug" element={<CategoryView />} />
         <Route path="/perfil/status/:slug" element={<CategoryView isUserProfile={true} />} />
+        
+        {/* Nova Rota de Suporte */}
+        <Route path="/support" element={<SupportView />} /> 
+
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </MainLayout>

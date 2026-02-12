@@ -10,6 +10,7 @@ interface DashboardHeaderProps {
   backPath?: string;
   className?: string;
   children?: React.ReactNode; 
+  hideFilters?: boolean;
 }
 
 export function DashboardHeader({ 
@@ -18,7 +19,8 @@ export function DashboardHeader({
   showBackButton = false, 
   backPath = "/", 
   className = "",
-  children 
+  children, 
+  hideFilters = false
 }: DashboardHeaderProps) {
   
   const { searchTerm, setSearchTerm } = useUIStore();
@@ -42,7 +44,7 @@ export function DashboardHeader({
             </button>
           )}
 
-          <div className="flex flex-col md:flex-row md:items-center gap-2">
+          <div className="flex flex-col gap-2">
             <h1 className={`text-2xl md:text-[30px] font-[800] leading-tight ${className ? "text-white" : "text-foreground"}`}> 
               {title} 
             </h1>
@@ -52,6 +54,7 @@ export function DashboardHeader({
         </div>
 
         {/* Filtros e Busca */}
+        {!hideFilters && (
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full xl:w-auto justify-end px-2 md:px-0">
           <FilterBar /> 
           
@@ -69,6 +72,7 @@ export function DashboardHeader({
             <Search className="absolute right-3.5 w-4 h-4 text-muted-foreground/60" />
           </div>
         </div>
+        )}
       </div>
     </div>
   );
