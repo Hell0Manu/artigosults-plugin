@@ -109,7 +109,7 @@ export function ProfileView() {
 
         <div className="flex-1">
           <TabsContent value="status" className="h-full m-0 outline-none">
-            <PostGrid posts={userPosts} isLoading={isLoading} />
+            <PostGrid posts={userPosts} isLoading={isLoading} basePath="/perfil/status"/>
           </TabsContent>
 
           <TabsContent value="publicados" className="h-full m-0 outline-none">

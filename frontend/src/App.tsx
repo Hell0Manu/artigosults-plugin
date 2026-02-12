@@ -117,6 +117,7 @@ export default function App() {
         <Route path="/" element={<DashboardHome />} />        
         <Route path="/perfil" element={<ProfileView />} />
         <Route path="/status/:slug" element={<CategoryView />} />
+        <Route path="/perfil/status/:slug" element={<CategoryView isUserProfile={true} />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </MainLayout>

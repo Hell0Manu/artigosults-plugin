@@ -16,7 +16,7 @@ const menuItems = [
 
 export function Sidebar() {
   const location = useLocation();
-  const { currentUser, setProfileOpen } = useDashboardStore();
+  const { currentUser, setProfileOpen, setViewedUser } = useDashboardStore();
 
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -183,6 +183,7 @@ export function Sidebar() {
          to="/perfil"
             onClick={() => {
               setProfileOpen(true); 
+              setViewedUser(null);
               if (isMobile) setIsMobileOpen(false);
             }}
             className={cn(

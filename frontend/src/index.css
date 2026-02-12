@@ -136,7 +136,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-border: var(--border);
-  --color-input: var(--input);
+
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -208,16 +208,6 @@
   --accent-pink: #FF47A3;
   --accent-green: #49CA8A;
   --accent-gray: #9AA6AC;
-
-  /* =========================
-     INPUT STATES
-  ========================== */
-  --input-border-default: #373F43;
-  --input-border-hover: #4E595F;
-  --input-border-focus: #00ACAC;
-  --input-border-disabled: #2C3236;
-
-  --content-disabled: #65737B;
 
   /* Sidebar */
   --sidebar: #0A171F;

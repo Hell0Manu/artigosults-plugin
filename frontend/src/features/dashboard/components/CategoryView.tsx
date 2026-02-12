@@ -4,18 +4,28 @@ import { Search, ChevronLeft } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDashboardStore } from "@/store/useDashboardStore";
 
-export function CategoryView() {
-  const { slug } = useParams(); 
+export function CategoryView({ isUserProfile = false }: { isUserProfile?: boolean }) {  const { slug } = useParams(); 
   const navigate = useNavigate();
 
   const { 
     posts, 
     searchTerm, 
     setSearchTerm,
+    currentUser, 
+    viewedUser   
   } = useDashboardStore();
 
   const currentStatus = slug || "draft";
-  const categoryPosts = posts.filter(p => p.status === currentStatus);
+  let categoryPosts = posts.filter(p => p.status === currentStatus);
+
+  if (isUserProfile) {
+    const targetUser = viewedUser || currentUser;
+    if (targetUser) {
+      categoryPosts = categoryPosts.filter(post => 
+        post.authors.some(a => a.name === targetUser.name)
+      );
+    }
+  }
 
   const statusLabels: Record<string, string> = {
     draft: "Rascunho",
@@ -54,7 +64,7 @@ export function CategoryView() {
           <div className="flex items-center gap-3 w-full xl:w-auto justify-start pl-2 md:pl-0">
             {/* Botão Voltar */}
             <button
-              onClick={() => navigate("/")}
+              onClick={() => isUserProfile ? navigate("/perfil") : navigate("/")}
               className="bg-card hover:opacity-90 text-card-foreground w-8 h-8 rounded-full flex items-center justify-center shadow-sm active:scale-95 transition-all"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -66,6 +76,11 @@ export function CategoryView() {
               </span>
               <h2 className="text-white text-lg md:text-xl font-bold capitalize truncate">
                 {statusLabels[currentStatus]}
+                {isUserProfile && (viewedUser || currentUser) && (
+                   <span className="opacity-70 font-normal ml-2 text-base">
+                     de {(viewedUser || currentUser)?.name.split(' ')[0]}
+                   </span>
+                )}
               </h2>
             </div>
           </div>

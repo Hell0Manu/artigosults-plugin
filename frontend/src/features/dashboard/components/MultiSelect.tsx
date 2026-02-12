@@ -62,7 +62,7 @@ export function MultiSelect<T>({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full sm:w-[200px] justify-between rounded-full border hover:border-indigo-300 bg-white px-3 h-10"
+          className="w-full sm:w-[200px] justify-between rounded-full border border-border focus-within:ring-2 focus-within:ring-brand bg-card px-3 h-10"
         >
           <div className="flex gap-1 overflow-hidden items-center">
             {selectedValues.length === 0 ? (
